@@ -76,7 +76,7 @@ export const restaurantProfile = async (req, res, next) => {
         const restaurantId = req.restaurant.id;
         
         const restaurantData = await Restaurant.findById(restaurantId).select("-password");
-        
+        restaurantData.role = "restaurant";
         if (!restaurantData) {
             return res.status(404).json({ message: "Restaurant not found" });
         }

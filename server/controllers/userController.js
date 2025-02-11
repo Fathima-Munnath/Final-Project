@@ -20,7 +20,7 @@ export const userSignup = async (req, res, next) => {
 
         const hashedPassword = bcrypt.hashSync(password, 10);
 
-        const userData = new User({ name, email, password: hashedPassword, mobile, profilePic });
+        const userData = new User({ name, email, password: hashedPassword, mobile, profilePic, role: "user" });
         await userData.save();
 
         const token = generateToken(userData._id);
@@ -41,6 +41,7 @@ export const userLogin = async (req, res, next) => {
         }
 
         const userExist = await User.findOne({ email });
+        userExist.role = "user";
 
         if (!userExist) {
             return res.status(404).json({ message: "user does not exist" });
@@ -49,10 +50,10 @@ export const userLogin = async (req, res, next) => {
         const passwordMatch = bcrypt.compareSync(password, userExist.password);
 
         if (!passwordMatch) {
-            return res.status(401).json({ message: "user not authenticated" });
+            return res.status(401).json({ message: "Invalid credentials" });
         }
 
-        const token = generateToken(userExist._id);
+        const token = generateToken(userExist._id,"user");
         res.cookie("token", token);
 
         // delete userExist._doc.password;  one method to delete the property of an object #mongodb
@@ -72,6 +73,7 @@ export const userProfile = async (req, res, next) => {
         const userId = req.user.id;
 
         const userData = await User.findById(userId).select("-password");
+        userData.role = "user";
         return res.json({ data: userData, message: "user profile fetched" });
     } catch (error) {
         return res.status(error.statusCode || 500).json({ message: error.message || "Internal server error" });

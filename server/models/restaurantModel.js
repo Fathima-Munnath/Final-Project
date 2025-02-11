@@ -22,7 +22,7 @@ const restaurantSchema = new mongoose.Schema({
   mobile: {
     type: String,
     required: true,
-},
+  },
   location: {
     street: String,
     city: String,
@@ -31,11 +31,15 @@ const restaurantSchema = new mongoose.Schema({
   profiePic: {
     type: String,
     default: "https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg",
-},
+  },
   menuItems: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "MenuItem",
   }],
+  role: {
+    type: String,
+    required: true,
+  },
 }, { timestamps: true });
 
-export const Restaurant =  mongoose.model("Restaurant", restaurantSchema);
+export const Restaurant = mongoose.model("Restaurant", restaurantSchema);
