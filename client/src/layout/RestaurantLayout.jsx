@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import Header from "../components/restaurant/Header";
+import {RestaurantHeaderBeforeLogin} from "../components/restaurant/Header";
 import { RestaurantHeader } from "../components/restaurant/RestaurantHeader";
 import Footer from "../components/user/Footer";
 import { Outlet, useLocation } from "react-router-dom";
 import { axiosInstance } from "../config/AxiosInstance";
 import { useSelector, useDispatch } from "react-redux";
-import { clearRestaurant, saveRestaurant } from "../redux/features/userSlice";
+import { clearRestaurant, saveRestaurant } from "../redux/features/restaurantSlice";
 
 export const RestaurantLayout = () => {
   const { isRestaurantAuth } = useSelector((state) => state.restaurant); // Ensure correct slice
@@ -31,7 +31,7 @@ export const RestaurantLayout = () => {
   return (
     <div className="flex flex-col min-h-screen bg-base-100">
       {/* Dynamic Header Based on Authentication */}
-      {isRestaurantAuth ? <RestaurantHeader /> : <Header />}
+      {isRestaurantAuth ? <RestaurantHeader /> : <RestaurantHeaderBeforeLogin />}
 
       {/* Main Content Area */}
       <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-6">

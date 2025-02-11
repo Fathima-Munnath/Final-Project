@@ -9,7 +9,7 @@ export const RestaurantHeaderBeforeLogin = () => {
       {/* Left - Logo */}
       <div className="navbar-start">
         <a className="text-2xl font-bold text-green-600 cursor-pointer" onClick={() => navigate("/")}>
-          FoodExpress 🍽️
+          FoodExpress
         </a>
       </div>
 

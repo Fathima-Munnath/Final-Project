@@ -4,9 +4,10 @@ import { axiosInstance } from "../../config/AxiosInstance";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { clearUser, saveUser } from "../../redux/features/userSlice";
+import { saveRestaurant, clearRestaurant } from "../../redux/features/restaurantSlice";
 import toast from "react-hot-toast";
 
-export const Login = ({ role = "user" }) => {
+export const Login = ({ role }) => {
     const { register, handleSubmit } = useForm({ mode: "onSubmit" }); // Ensure correct form behavior
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -38,15 +39,23 @@ export const Login = ({ role = "user" }) => {
             console.log("Response:", response);
 
             if (response?.data?.data) {
-                dispatch(saveUser(response?.data.data));
-                 toast.success("Login successful");
+                if (role == "restaurant") {
+                    dispatch(saveRestaurant(response?.data.data));
+                }
+                else {
+                    dispatch(saveUser(response?.data.data));
+                }
+                toast.success("Login successful");
                 navigate(user.homeRoute);
             } else {
                 throw new Error("Invalid response from server");
             }
         } catch (error) {
-            dispatch(clearUser());
-             toast.error("Login failed. Please check your credentials.");
+            if (role == "restaurant")
+                dispatch(clearRestaurant());
+            else
+                dispatch(clearUser());
+            toast.error("Login failed. Please check your credentials.");
             console.error("Login Error:", error);
         }
     };

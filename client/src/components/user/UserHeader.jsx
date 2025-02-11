@@ -1,24 +1,22 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ShoppingCart, User } from "lucide-react";
+import { ShoppingCart, User, Menu } from "lucide-react"; // Import Menu icon for mobile
 import { DarkMode } from "../shared/DarkMode";
 import { axiosInstance } from "../../config/AxiosInstance";
 
-
-
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false); // New state for mobile menu
+
   const handleLogOut = async () => {
-          try {
-              const response = await axiosInstance({
-                  method: "GET",
-                  url: "/user/logout",
-              });
-              //navigate('/login');
-          } catch (error) {
-              console.log(error);
-          }
-      };
+    try {
+      await axiosInstance.get("/user/logout");
+      // navigate('/login');
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <header className="bg-gradient-to-r from-green-600 to-teal-600 text-white shadow-lg sticky top-0 w-full z-50">
@@ -28,12 +26,20 @@ const Header = () => {
           🍔 FoodieHub
         </Link>
 
+        {/* Mobile Menu Button */}
+        <button
+          className="md:hidden block focus:outline-none"
+          onClick={() => setMobileNavOpen(!mobileNavOpen)}
+        >
+          <Menu className="w-8 h-8" />
+        </button>
+
         {/* Navigation (Desktop) */}
         <nav className="hidden md:flex space-x-8 text-lg font-medium">
           <Link to="/" className="hover:underline">Home</Link>
           <Link to="/about" className="hover:underline">About</Link>
           <Link to="/menu" className="hover:underline">Menu</Link>
-          <Link to="/signup" className="bg-white text-red-500 px-4 py-1 rounded-full hover:bg-gray-200 transition" onClick= {()=>navigate('/signup')} >
+          <Link to="/signup" className="bg-white text-red-500 px-4 py-1 rounded-full hover:bg-gray-200 transition">
             Join Us
           </Link>
         </nav>
@@ -57,12 +63,24 @@ const Header = () => {
             {menuOpen && (
               <div className="absolute right-0 mt-3 w-44 bg-white text-gray-800 shadow-xl rounded-lg py-2 overflow-hidden">
                 <Link to="/user/profile" className="block px-4 py-3 hover:bg-gray-200">Profile</Link>
-                <Link to="/logout" className="block px-4 py-3 hover:bg-gray-200" onClick= {handleLogOut}>Logout</Link>
+                <Link to="/logout" className="block px-4 py-3 hover:bg-gray-200" onClick={handleLogOut}>Logout</Link>
               </div>
             )}
           </div>
         </div>
       </div>
+
+      {/* Mobile Navigation */}
+      {mobileNavOpen && (
+        <nav className="md:hidden bg-green-700 text-white flex flex-col items-center space-y-4 py-4">
+          <Link to="/" className="hover:underline" onClick={() => setMobileNavOpen(false)}>Home</Link>
+          <Link to="/about" className="hover:underline" onClick={() => setMobileNavOpen(false)}>About</Link>
+          <Link to="/menu" className="hover:underline" onClick={() => setMobileNavOpen(false)}>Menu</Link>
+          <Link to="/signup" className="bg-white text-red-500 px-4 py-1 rounded-full hover:bg-gray-200 transition" onClick={() => setMobileNavOpen(false)}>
+            Join Us
+          </Link>
+        </nav>
+      )}
     </header>
   );
 };

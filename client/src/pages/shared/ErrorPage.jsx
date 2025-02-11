@@ -8,7 +8,7 @@ export const ErrorPage = ({ role }) => {
     };
 
     if (role == "restaurant") {
-        user.home_route = "/restaurant";
+        user.home_route = "/restaurant/dashboard";
     }
 
     console.log("role===", role);

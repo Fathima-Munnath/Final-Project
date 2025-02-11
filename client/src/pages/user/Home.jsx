@@ -14,7 +14,7 @@ function Home() {
 
         {/* Content */}
         <div className="relative text-center text-white z-10 px-4">
-          <h1 className="text-4xl font-extrabold mb-4">Fresh & Fast, Straight to Your Door! 🍽️</h1>
+          <h1 className="text-4xl font-extrabold mb-4">Fresh & Fast, Straight to Your Door!</h1>
 
           {/* Search Bar */}
           <div className="flex justify-center">
@@ -32,7 +32,7 @@ function Home() {
       </div>
       {/* Section Title */}
       <h2 className="text-3xl font-bold text-center text-green-700 mb-6">
-        Explore Popular Categories 🍽️
+        Explore Popular Categories
       </h2>
       {/* Categories Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 justify-center">

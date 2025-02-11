@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import { UserLayout } from '../layout/UserLayout';
+import { RestaurantLayout } from '../layout/RestaurantLayout';
 import { ErrorPage } from '../pages/shared/ErrorPage';
 import Home from '../pages/user/Home';
 import { Signup } from '../pages/shared/signupPage';
@@ -20,7 +21,7 @@ export const router = createBrowserRouter([
   {
     path: "",
     element: <UserLayout />,
-    errorElement: <ErrorPage />,
+    errorElement: <ErrorPage role="user"/>,
     children: [
       {
         path: "",
@@ -32,7 +33,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "login",
-        element: <Login />,
+        element: <Login role="user"/>,
       },
 
       {
@@ -82,7 +83,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "restaurant",
-    element: <restaurantLayout />,
+    element: <RestaurantLayout />,
     errorElement: <ErrorPage role="restaurant" />,
     children: [
       {

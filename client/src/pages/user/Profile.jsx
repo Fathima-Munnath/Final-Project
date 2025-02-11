@@ -71,6 +71,7 @@ export const Profile = () => {
               <h2 className="text-3xl font-bold mt-6 text-gray-800">{profileData?.name}</h2>
               <p className="text-lg text-gray-600">{profileData?.email}</p>
               <p className="text-lg text-gray-600">{profileData?.mobile}</p>
+              <p className="text-lg text-gray-600">Role: {profileData?.role}</p>
 
               <Link to="/edit-profile" className="btn bg-blue-500 text-white hover:bg-blue-600 transition mt-6">
                 Edit Profile

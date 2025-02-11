@@ -9,11 +9,11 @@ export const restaurantSlice = createSlice({
     name: "restaurant",
     initialState,
     reducers: {
-        saveUser: (state, action) => {
+        saveRestaurant: (state, action) => {
             state.isRestaurantAuth = true;
             state.restaurantData = action.payload;
         },
-        clearUser: (state) => {
+        clearRestaurant: (state) => {
             state.isRestaurantAuth = false;
             state.restaurantData= {};
         },
