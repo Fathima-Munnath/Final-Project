@@ -3,7 +3,7 @@ import React, { useState } from "react";
 export const DarkMode = () => {
     const [isDarkMode, setIsDarkMode] = useState(false);
 
-    document.querySelector("html").setAttribute("data-theme", isDarkMode ? "light" : "dark");
+    document.querySelector("html").setAttribute("data-theme", !isDarkMode ? "light" : "dark");
 
     return (
         <label className="swap swap-rotate">
