@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useFetch } from "../../hooks/UseFetch";
-import { axiosInstance } from "../../config/axiosInstance";
+import { axiosInstance } from "../../config/AxiosInstance";
 import { Link } from "react-router-dom";
 
 export const Profile = () => {

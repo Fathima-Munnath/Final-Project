@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ShoppingCart, User } from "lucide-react";
 import { DarkMode } from "../shared/DarkMode";
-import { axiosInstance } from "../../config/axiosInstance";
+import { axiosInstance } from "../../config/AxiosInstance";
 
 
 

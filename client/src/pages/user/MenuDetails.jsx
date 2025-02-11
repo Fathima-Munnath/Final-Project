@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { axiosInstance } from "../../config/axiosInstance";
+import { axiosInstance } from "../../config/AxiosInstance";
 
 export const MenuDetails = () => {
     const params = useParams();
