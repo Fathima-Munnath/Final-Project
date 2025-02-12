@@ -2,6 +2,8 @@ import { User } from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import { generateToken } from "../utils/token.js";
 
+const NODE_ENV = process.env.NODE_ENV;
+
 export const userSignup = async (req, res, next) => {
     try {
         console.log("hitted");
@@ -24,7 +26,13 @@ export const userSignup = async (req, res, next) => {
         await userData.save();
 
         const token = generateToken(userData._id);
-        res.cookie("token", token, {});
+        //res.cookie("token", token, {});
+        res.cookie("token", token, {
+            sameSite: NODE_ENV === "production" ? "None" : "Lax",
+            secure: NODE_ENV === "production",
+            httpOnly: NODE_ENV === "production",
+        });
+
 
         return res.json({ data: userData, message: "user account created" });
     } catch (error) {
@@ -54,7 +62,14 @@ export const userLogin = async (req, res, next) => {
         }
 
         const token = generateToken(userExist._id,"user");
-        res.cookie("token", token);
+        // res.cookie("token", token);
+        res.cookie("token", token, {
+            sameSite: NODE_ENV === "production" ? "None" : "Lax",
+            secure: NODE_ENV === "production",
+            httpOnly: NODE_ENV === "production",
+        });
+
+
 
         // delete userExist._doc.password;  one method to delete the property of an object #mongodb
 
@@ -82,7 +97,12 @@ export const userProfile = async (req, res, next) => {
 
 export const userLogout = async (req, res, next) => {
     try {
-        res.clearCookie("token");
+        res.clearCookie("token", {
+            sameSite: NODE_ENV === "production" ? "None" : "Lax",
+            secure: NODE_ENV === "production",
+            httpOnly: NODE_ENV === "production",
+        });
+
 
         return res.json({ message: "user logout success" });
     } catch (error) {

@@ -31,6 +31,14 @@ export const restaurantSignup = async (req, res, next) => {
         });
 
         await restaurantData.save();
+        const token = generateToken(restaurantData._id, "restaurant");
+
+        // res.cookie("token", token);
+        res.cookie("token", token, {
+            sameSite: NODE_ENV === "production" ? "None" : "Lax",
+            secure: NODE_ENV === "production",
+            httpOnly: NODE_ENV === "production",
+        });
 
         return res.status(201).json({ data: restaurantData, message: "Restaurant account created successfully" });
     } catch (error) {
@@ -59,7 +67,12 @@ export const restaurantLogin = async (req, res, next) => {
         }
 
         const token = generateToken(restaurantExist._id,"restaurant");
-        res.cookie("token", token, { httpOnly: true });
+        //res.cookie("token", token, { httpOnly: true });
+        res.cookie("token", token, {
+            sameSite: NODE_ENV === "production" ? "None" : "Lax",
+            secure: NODE_ENV === "production",
+            httpOnly: NODE_ENV === "production",
+        });
         {
             const { password, ...restaurantDataWithoutPassword } = restaurantExist._doc;
             return res.json({ data: restaurantDataWithoutPassword, message: "Restaurant login successful" });
@@ -89,7 +102,11 @@ export const restaurantProfile = async (req, res, next) => {
 
 export const restaurantLogout = async (req, res, next) => {
     try {
-        res.clearCookie("token");
+        res.clearCookie("token", {
+            sameSite: NODE_ENV === "production" ? "None" : "Lax",
+            secure: NODE_ENV === "production",
+            httpOnly: NODE_ENV === "production",
+        });
 
         return res.json({ message: "Restaurant logout successful" });
     } catch (error) {
