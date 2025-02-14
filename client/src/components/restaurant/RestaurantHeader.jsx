@@ -1,11 +1,23 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { axiosInstance } from "../../config/AxiosInstance";
+import { Link } from "react-router-dom";
 
 export const RestaurantHeader = () => {
   const navigate = useNavigate();
 
+  const handleLogOut = async () => {
+      try {
+        await axiosInstance.get("/restaurant/logout");
+        navigate("/");
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  
+
   return (
-    <div className="navbar bg-white shadow-md px-6">
+    <div className="navbar bg-gradient-to-r from-green-600 to-teal-600 shadow-md px-6">
       {/* Left - Sidebar Menu */}
       <div className="navbar-start">
         <div className="dropdown">
@@ -14,51 +26,27 @@ export const RestaurantHeader = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" />
             </svg>
           </button>
-          <ul tabIndex={0} className="menu menu-sm dropdown-content bg-white rounded-box z-[1] mt-3 w-52 p-2 shadow">
-            <li>
-              <a onClick={() => navigate("/restaurant/dashboard")}>Dashboard</a>
-            </li>
-            <li>
-              <a onClick={() => navigate("/restaurant/orders")}>Orders</a>
-            </li>
-            <li>
-              <a onClick={() => navigate("/restaurant/menu")}>Manage Menu</a>
-            </li>
-            <li>
-              <a onClick={() => navigate("/restaurant/profile")}>Profile</a>
-            </li>
+          <ul tabIndex={0} className="menu menu-sm dropdown-content bg-white rounded-lg shadow-md mt-3 w-52 p-2 z-[1]">
+            <li><a onClick={() => navigate("/")}>Home</a></li>
+            <li><a onClick={() => navigate("/restaurant/dashboard")}>Dashboard</a></li>
+            <li><a onClick={() => navigate("/restaurant/orders")}>Orders</a></li>
+            <li><a onClick={() => navigate("/restaurant/addMenu")}>Add Menu</a></li>
+            <li><a onClick={() => navigate("/restaurant/profile")}>Profile</a></li>
+            <li><Link to="restaurant/logout" onClick={handleLogOut}>Logout</Link></li>
           </ul>
         </div>
       </div>
 
       {/* Center - Logo */}
       <div className="navbar-center">
-        <a className="text-2xl font-bold text-green-600 cursor-pointer" onClick={() => navigate("/restaurant/dashboard")}>
-          FoodExpress 🍽️
+        <a className="text-2xl font-bold text-white cursor-pointer hover:text-green-700 transition" onClick={() => navigate("/restaurant/dashboard")}>
+        🍔 FoodieHub
         </a>
       </div>
-
+      {/* <div>
+      <Link to="/logout" className="block px-4 py-3 hover:bg-gray-200" onClick={handleLogOut}>Logout</Link>
+      </div> */}
       {/* Right - Actions (Notifications & Profile) */}
-      <div className="navbar-end flex gap-4">
-        {/* Orders Notification */}
-        <button className="btn btn-ghost btn-circle" onClick={() => navigate("/restaurant/orders")}>
-          <div className="indicator">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h11m-5-5l5 5-5 5" />
-            </svg>
-            <span className="badge badge-xs badge-primary indicator-item"></span>
-          </div>
-        </button>
-
-        {/* Profile */}
-        <button className="btn btn-ghost btn-circle" onClick={() => navigate("/restaurant/profile")}>
-          <div className="avatar">
-            <div className="w-8 rounded-full">
-              <img src="https://via.placeholder.com/40" alt="Profile" />
-            </div>
-          </div>
-        </button>
-      </div>
     </div>
   );
 };

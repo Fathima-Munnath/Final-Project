@@ -28,7 +28,6 @@ const Footer = () => {
           <Link to="/terms" className="block text-gray-300 hover:text-white">Terms of Use</Link>
           <Link to="/privacy" className="block text-gray-300 hover:text-white">Privacy Policy</Link>
           <Link to="/cookies" className="block text-gray-300 hover:text-white">Cookie Policy</Link>
-          <Link to="restaurant/login" className="block text-gray-300 hover:text-white">Login as restaurant</Link>
         </nav>
 
         {/* Newsletter */}

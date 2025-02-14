@@ -23,6 +23,7 @@ export const UserLayout = () => {
       console.error("User authentication failed:", error);
     }
   };
+  //console.log('pathname===', location.pathname)
 
   useEffect(() => {
     checkUser();

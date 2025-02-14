@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 import { ShoppingCart, User, Menu } from "lucide-react"; // Import Menu icon for mobile
 import { DarkMode } from "../shared/DarkMode";
 import { axiosInstance } from "../../config/AxiosInstance";
+import { useNavigate } from "react-router-dom";
 
-const Header = () => {
+const UserHeader = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false); // New state for mobile menu
+  const navigate = useNavigate();
 
   const handleLogOut = async () => {
     try {
@@ -59,13 +61,16 @@ const Header = () => {
             <button onClick={() => setMenuOpen(!menuOpen)} className="focus:outline-none">
               <User className="w-7 h-7" />
             </button>
-            <DarkMode />
+          
             {menuOpen && (
               <div className="absolute right-0 mt-3 w-44 bg-white text-gray-800 shadow-xl rounded-lg py-2 overflow-hidden">
                 <Link to="/user/profile" className="block px-4 py-3 hover:bg-gray-200">Profile</Link>
-                <Link to="/logout" className="block px-4 py-3 hover:bg-gray-200" onClick={handleLogOut}>Logout</Link>
+                <Link to="/user/logout" className="block px-4 py-3 hover:bg-gray-200" onClick={handleLogOut}>Logout</Link>
               </div>
             )}
+   
+              <DarkMode />
+              
           </div>
         </div>
       </div>
@@ -85,4 +90,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default UserHeader;

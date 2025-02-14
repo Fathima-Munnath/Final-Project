@@ -2,6 +2,8 @@ import { Restaurant } from "../models/restaurantModel.js";
 import bcrypt from "bcrypt";
 import { generateToken } from "../utils/token.js";
 
+const NODE_ENV = process.env.NODE_ENV;
+
 export const restaurantSignup = async (req, res, next) => {
     try {
         console.log("Signup API hit");

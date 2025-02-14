@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import {RestaurantHeaderBeforeLogin} from "../components/restaurant/Header";
 import { RestaurantHeader } from "../components/restaurant/RestaurantHeader";
+import Header from "../components/user/Header";
 import Footer from "../components/user/Footer";
 import { Outlet, useLocation } from "react-router-dom";
 import { axiosInstance } from "../config/AxiosInstance";
@@ -31,7 +31,7 @@ export const RestaurantLayout = () => {
   return (
     <div className="flex flex-col min-h-screen bg-base-100">
       {/* Dynamic Header Based on Authentication */}
-      {isRestaurantAuth ? <RestaurantHeader /> : <RestaurantHeaderBeforeLogin />}
+      {isRestaurantAuth ? <RestaurantHeader /> : <Header /> } 
 
       {/* Main Content Area */}
       <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-6">

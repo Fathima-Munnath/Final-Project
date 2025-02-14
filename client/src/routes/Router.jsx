@@ -12,7 +12,10 @@ import { MenuDetails } from '../pages/user/MenuDetails';
 import { ProtectedRoute } from "./ProtectedRoute";
 import { ProtectedRouteRestaurant } from "./ProtectedRouteRestaurant";
 import { Profile } from '../pages/user/Profile';
-import AddMenu from "../pages/restaurant/AddMenu";
+import {AddMenu} from "../pages/restaurant/AddMenu";
+import Dashboard from "../pages/restaurant/Dashboard";
+import RestaurantOrders from "../pages/restaurant/RestaurantOrders";
+import RestaurantProfile  from "../pages/restaurant/RestaurantProfile";
 
 const data = {};
 
@@ -100,13 +103,15 @@ export const router = createBrowserRouter([
         children: [
           {
             path: "dashboard",
+            element:<Dashboard />
           },
           {
             path: "all-menuItems",
+            element: <RestaurantOrders />
           },
           {
             path: "profile",
-            element: <h1> Restaurant Profile page</h1>
+            element: <RestaurantProfile />
           },
           {
             path: "addMenu",
