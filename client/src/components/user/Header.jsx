@@ -16,7 +16,6 @@ const Header = () => {
           <Link to="/about" className="hover:underline">About</Link>
           <Link to="/menu" className="hover:underline">Menu</Link>
           <Link to="/login" className="hover:underline">Login</Link>
-          <Link to="restaurant/login" className="hover:underline">Restaurant Login</Link>
           <Link to="/signup" className="bg-white text-green-600 px-4 py-1 rounded-full hover:bg-gray-200 transition">
             Join Us
           </Link>

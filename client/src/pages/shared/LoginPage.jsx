@@ -12,6 +12,7 @@ export const Login = ({ role }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    console.log("role is :"+ role );
     const user = role === "restaurant"
         ? {
             role: "restaurant",
@@ -92,7 +93,9 @@ export const Login = ({ role }) => {
                             New User? Sign up
                         </Link>
                     </div>
-                    <button className="btn btn-primary w-full">Login</button>
+                    <button className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition">
+                        Login
+                    </button>
                 </form>
             </div>
         </div>

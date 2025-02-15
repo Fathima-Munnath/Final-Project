@@ -3,14 +3,15 @@ import { useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
 
 export const ProtectedRouteRestaurant = () => {
-    const { isRestaurantAuth } = useSelector((state) => state.restaurant);
+    const { isRestaurantAuth, restaurantData } = useSelector((state) => state.restaurant);
+    console.log("isRestoAuth=====", isRestaurantAuth);
+
+    // loading
+    
     const navigate = useNavigate();
-
-    useEffect(() => {
-        if (!isRestaurantAuth) {
-            navigate("/login");
-        }
-    }, [isRestaurantAuth, navigate]);  // Added dependencies
-
-    return isRestaurantAuth ? <Outlet /> : null; // Prevents rendering when not authenticated
+    if (!isRestaurantAuth) {
+        navigate("/restaurant/login");
+        return;
+    }
+    return <Outlet />;
 };

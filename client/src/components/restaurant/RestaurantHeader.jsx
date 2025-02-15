@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../../config/AxiosInstance";
-import { Link } from "react-router-dom";
+//import { Link } from "react-router-dom";
 
 export const RestaurantHeader = () => {
   const navigate = useNavigate();
@@ -27,12 +27,11 @@ export const RestaurantHeader = () => {
             </svg>
           </button>
           <ul tabIndex={0} className="menu menu-sm dropdown-content bg-white rounded-lg shadow-md mt-3 w-52 p-2 z-[1]">
-            <li><a onClick={() => navigate("/")}>Home</a></li>
             <li><a onClick={() => navigate("/restaurant/dashboard")}>Dashboard</a></li>
             <li><a onClick={() => navigate("/restaurant/orders")}>Orders</a></li>
             <li><a onClick={() => navigate("/restaurant/addMenu")}>Add Menu</a></li>
             <li><a onClick={() => navigate("/restaurant/profile")}>Profile</a></li>
-            <li><Link to="restaurant/logout" onClick={handleLogOut}>Logout</Link></li>
+            <li><a onClick={handleLogOut}>Logout</a></li>
           </ul>
         </div>
       </div>

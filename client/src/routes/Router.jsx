@@ -13,9 +13,9 @@ import { ProtectedRoute } from "./ProtectedRoute";
 import { ProtectedRouteRestaurant } from "./ProtectedRouteRestaurant";
 import { Profile } from '../pages/user/Profile';
 import {AddMenu} from "../pages/restaurant/AddMenu";
-import Dashboard from "../pages/restaurant/Dashboard";
+import  Dashboard  from "../pages/restaurant/Dashboard";
 import RestaurantOrders from "../pages/restaurant/RestaurantOrders";
-import RestaurantProfile  from "../pages/restaurant/RestaurantProfile";
+import {RestaurantProfile}  from "../pages/restaurant/RestaurantProfile";
 
 const data = {};
 

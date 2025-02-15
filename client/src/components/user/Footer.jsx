@@ -24,10 +24,10 @@ const Footer = () => {
 
         {/* Legal */}
         <nav>
-          <h6 className="text-lg font-semibold text-red-500 mb-3">Legal</h6>
-          <Link to="/terms" className="block text-gray-300 hover:text-white">Terms of Use</Link>
-          <Link to="/privacy" className="block text-gray-300 hover:text-white">Privacy Policy</Link>
-          <Link to="/cookies" className="block text-gray-300 hover:text-white">Cookie Policy</Link>
+          <h6 className="text-lg font-semibold text-red-500 mb-3">Restaurant</h6>
+          <Link to="/restaurant/signup" className="block text-gray-300 hover:text-white">Partner With Us</Link>
+          <Link to="/restaurant/login" className="block text-gray-300 hover:text-white">Restaurant Login</Link>
+          <Link to="/cookies" className="block text-gray-300 hover:text-white">Restaurants</Link>
         </nav>
 
         {/* Newsletter */}
