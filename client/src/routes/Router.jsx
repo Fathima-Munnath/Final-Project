@@ -16,6 +16,9 @@ import {AddMenu} from "../pages/restaurant/AddMenu";
 import  Dashboard  from "../pages/restaurant/Dashboard";
 import RestaurantOrders from "../pages/restaurant/RestaurantOrders";
 import {RestaurantProfile}  from "../pages/restaurant/RestaurantProfile";
+import Cart from "../pages/user/Cart";
+import Orders from "../pages/user/Orders";
+import Payment from "../pages/user/Payment";
 
 const data = {};
 
@@ -69,15 +72,15 @@ export const router = createBrowserRouter([
           },
           {
             path: "cart",
-            // element: <Cart />,
+            element: <Cart />,
           },
           {
             path: "orders",
-            // element: <h1> orders page</h1>,
+            element: <Orders />
           },
           {
             path: "payment/success",
-            // element: <h2>Payment success</h2>,
+            element: <Payment />
           },
         ],
       },

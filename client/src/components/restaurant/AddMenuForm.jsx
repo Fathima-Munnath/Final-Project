@@ -15,21 +15,26 @@ export const AddMenuForm = ({ menuItem }) => {
 
     const onSubmit = async (data) => {
         try {
-            console.log(data, "=====data");
             const formData = new FormData();
-
-            formData.append("title", data.name);
+            formData.append("name", data.name);
             formData.append("description", data.description);
-            formData.append("duration", data.price);
-            formData.append("price", data.category);
-            formData.append("image", data.image[0]);
+            formData.append("price", data.price);
+            formData.append("category", data.category);
+            if (data.image && data.image.length > 0) {
+                formData.append("image", data.image[0]); // Append the actual file
+            } else {
+                console.error("No image selected");
+            }
+    
 
             const response = await axiosInstance({
-                url: "/menu/addMenu",
+                url: "/menu/add-menu",
                 method: "POST",
                 data: formData,
             });
+            console.log("response===", response)
             toast.success("Menu created successfully");
+            navigate("/restaurant/dashboard")
         } catch (error) {
             console.log(error);
             toast.error("Error while adding menu");
@@ -61,6 +66,7 @@ export const AddMenuForm = ({ menuItem }) => {
                 </label>
                 <input
                     type="file"
+                    accept="image/*"
                     className={`input text-sm ${errors.image ? "input-error" : ""}`}
                     {...register("image", { required: "Image is required" })}
                 />

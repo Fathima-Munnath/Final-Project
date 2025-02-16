@@ -22,14 +22,14 @@ export const restaurantSignup = async (req, res, next) => {
 
         const hashedPassword = bcrypt.hashSync(password, 10);
 
-        const restaurantData = new Restaurant({ 
-            name, 
-            email, 
-            password: hashedPassword, 
+        const restaurantData = new Restaurant({
+            name,
+            email,
+            password: hashedPassword,
             mobile,
-            location, 
-            profilePic, 
-            menuItems 
+            location,
+            profilePic,
+            menuItems
         });
 
         await restaurantData.save();
@@ -57,6 +57,7 @@ export const restaurantLogin = async (req, res, next) => {
         }
 
         const restaurantExist = await Restaurant.findOne({ email });
+        restaurantExist.role = "restaurant";
 
         if (!restaurantExist) {
             return res.status(404).json({ message: "Restaurant does not exist" });
@@ -68,7 +69,7 @@ export const restaurantLogin = async (req, res, next) => {
             return res.status(401).json({ message: "Invalid credentials" });
         }
 
-        const token = generateToken(restaurantExist._id,"restaurant");
+        const token = generateToken(restaurantExist._id, "restaurant");
         //res.cookie("token", token, { httpOnly: true });
         res.cookie("token", token, {
             sameSite: NODE_ENV === "production" ? "None" : "Lax",
@@ -80,7 +81,7 @@ export const restaurantLogin = async (req, res, next) => {
             return res.json({ data: restaurantDataWithoutPassword, message: "Restaurant login successful" });
         }
 
-       
+
     } catch (error) {
         return res.status(500).json({ message: error.message || "Internal server error" });
     }
@@ -89,7 +90,7 @@ export const restaurantLogin = async (req, res, next) => {
 export const restaurantProfile = async (req, res, next) => {
     try {
         const restaurantId = req.restaurant.id;
-        
+
         const restaurantData = await Restaurant.findById(restaurantId).select("-password");
         restaurantData.role = "restaurant";
         if (!restaurantData) {
@@ -122,34 +123,24 @@ export const checkRestaurant = async (req, res, next) => {
         return res.status(error.statusCode || 500).json({ message: error.message || "Internal server error" });
     }
 };
-export const restaurantProfileUpdate = async (req, res, next)=>{
-    try{
+export const restaurantProfileUpdate = async (req, res, next) => {
+    try {
         const restaurantId = req.restaurant.id;
-        const{name, email, mobile, profilePic} = req.body;
+        const { name, email, mobile, profilePic } = req.body;
 
         const restaurant = await Restaurant.findById(restaurantId)
-        if(!restaurant){
-            return res.status(404).json({meassage:"no restaurant found"})
+        if (!restaurant) {
+            return res.status(404).json({ meassage: "no restaurant found" })
         }
-
-        
-        restaurant.name = name ||  restaurant.name;
-        restaurant.email = email ||  restaurant.email;
+        restaurant.name = name || restaurant.name;
+        restaurant.email = email || restaurant.email;
         restaurant.mobile = mobile || restaurant.mobile;
-        restaurant.profilePic = profilePic ||  restaurant.profilePic;
-        
+        restaurant.profilePic = profilePic || restaurant.profilePic;
         await restaurant.save();
 
-        
-            const{ password,  ...restaurantDataWithoutPassword} = restaurant._doc;
-            return res.json({data:restaurantDataWithoutPassword, message:"Profile updated successfully"});
-        
-        
-
-       
-    }catch (error){
-        return res.status(404).json({message:error.message || "internal server error"})
-
+        const { password, ...restaurantDataWithoutPassword } = restaurant._doc;
+        return res.json({ data: restaurantDataWithoutPassword, message: "Profile updated successfully" });
+    } catch (error) {
+        return res.status(404).json({ message: error.message || "internal server error" })
     }
-
 };

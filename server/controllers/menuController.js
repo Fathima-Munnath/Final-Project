@@ -1,28 +1,32 @@
+import { cloudinaryInstance} from "../config/cloudinaryConfig.js";
 import { MenuItem } from "../models/menuModel.js";
- 
+
 export const addMenuItem = async (req, res, next) => {
     try {
         if (!req.restaurant || !req.restaurant.id) {
             return res.status(401).json({ message: "Unauthorized, restaurant not found" });
         }
-        const restaurantId = req.restaurant.id;
-
-        const { name, description, price, category,image } = req.body;
-
-        if (!name || !description || !price || !category ||!image) {
+        const { name, description, price, category } = req.body;
+        if (!name || !description || !price || !category) {
             return res.status(404).json({ message: "All fields are required" });
         };
-        console.log("image===", req.file);
 
-
+        let cloudinaryResponse;
         if (req.file) {
             cloudinaryResponse = await cloudinaryInstance.uploader.upload(req.file.path);
         }
-
-        console.log("cldRes====", cloudinaryResponse);
-
-
-        const menuItem = new MenuItem({ restaurantId, name, description, price, category, image: cloudinaryResponse.url, restaurant: restaurantId });
+        else {
+            return res.status(400).json({ message: "Image is required" });
+        }
+        const restaurantId = req.restaurant.id;
+        const menuItem = new MenuItem({ 
+            name, 
+            description, 
+            price, 
+            category, 
+            image: cloudinaryResponse.url, 
+            restaurantId: restaurantId 
+        });
         await menuItem.save()
         return res.json({ data: menuItem, message: "menuItem created" });
     }
@@ -31,29 +35,28 @@ export const addMenuItem = async (req, res, next) => {
     };
 };
 
-export const getMenuItems = async (req, res, next) =>{
-    try{
+export const getMenuItems = async (req, res, next) => {
+    try {
 
-   const menuList = await MenuItem.find().select("-description");
-   return res.json({data:menuList , message:"menuList fetched"})
-
-    }catch (error){
-        return res.status(error.statusCode || 500).json({ message: error.message || "Internal server error" });
+        const menuList = await MenuItem.find().populate("restaurantId", "name location mobile email");
+        return res.json({ data: menuList, message: "menuList fetched" })
 
     }
-
+    catch (error) {
+        return res.status(error.statusCode || 500).json({ message: error.message || "Internal server error" });
+    }
 };
 
 
 
-export const getMenuItemDetails = async (req, res, next) =>{
-    try{
+export const getMenuItemDetails = async (req, res, next) => {
+    try {
         const { menuId } = req.params;
-        
-     const menuDetails = await MenuItem.findOne({ _id: menuId }).populate("restaurantId", "-password");
-     return res.json({data:menuDetails , message:" menuDetails  fetched"})
 
-    }catch (error){
+        const menuDetails = await MenuItem.findOne({ _id: menuId }).populate("restaurantId", "-password");
+        return res.json({ data: menuDetails, message: " menuDetails  fetched" })
+
+    } catch (error) {
         return res.status(error.statusCode || 500).json({ message: error.message || "Internal server error" });
 
     }

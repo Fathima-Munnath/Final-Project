@@ -44,6 +44,13 @@ export const MenuDetails = () => {
           />
           <h2 className="text-3xl font-bold text-gray-800 mb-2">{menuDetails?.name}</h2>
           <p className="text-lg text-gray-600">{menuDetails?.description}</p>
+          <button
+            type="button"
+            className="px-3 py-2 w-half text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300"
+            onClick={() => addToCart(menuItem)}
+          >
+            Add to Cart
+          </button>
       </section>
   </div>
   

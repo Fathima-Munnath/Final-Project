@@ -25,8 +25,8 @@ const Footer = () => {
         {/* Legal */}
         <nav>
           <h6 className="text-lg font-semibold text-red-500 mb-3">Restaurant</h6>
-          <Link to="/restaurant/signup" className="block text-gray-300 hover:text-white">Partner With Us</Link>
-          <Link to="/restaurant/login" className="block text-gray-300 hover:text-white">Restaurant Login</Link>
+          <Link to="/restaurant/signup" className="block text-gray-300 hover:text-white"  onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>Partner With Us</Link>
+          <Link to="/restaurant/login" className="block text-gray-300 hover:text-white"  onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>Restaurant Login</Link>
           <Link to="/cookies" className="block text-gray-300 hover:text-white">Restaurants</Link>
         </nav>
 

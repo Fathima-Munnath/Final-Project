@@ -13,9 +13,10 @@ export const userAuth = (req, res, next) => {
         if (!tokenVerified) {
             return res.status(401).json({ message: "user not autherised", success: false });
         }
-
-        req.user = tokenVerified;
-
+        if (tokenVerified.role == "user")
+            req.user = tokenVerified;
+        else
+            return res.status(401).json({ message: "user autherization failed", success: false });
         next();
     } catch (error) {
         return res.status(401).json({ message: error.message || "user autherization failed", success: false });

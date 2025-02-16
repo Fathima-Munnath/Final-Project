@@ -1,11 +1,8 @@
-import multer, { diskStorage } from "multer";
+import multer from "multer";
 
-const storage = diskStorage({
+const storage = multer.diskStorage({  // Corrected import
     filename: function (req, file, cb) {
-        console.log('file===',file);
-        
-        cb(null, file.originalname);
+        cb(null, Date.now() + "-" + file.originalname); // Unique filename
     },
 });
-
 export const upload = multer({ storage: storage });

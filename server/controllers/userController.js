@@ -61,7 +61,7 @@ export const userLogin = async (req, res, next) => {
             return res.status(401).json({ message: "Invalid credentials" });
         }
 
-        const token = generateToken(userExist._id,"user");
+        const token = generateToken(userExist._id, "user");
         // res.cookie("token", token);
         res.cookie("token", token, {
             sameSite: NODE_ENV === "production" ? "None" : "Lax",
@@ -112,19 +112,24 @@ export const userLogout = async (req, res, next) => {
 
 export const checkUser = async (req, res, next) => {
     try {
-        return res.json({ message: "user autherized" });
+        const userId = req.user.id;
+        return res.json({ message: "userId :"+ userId });
+        // if (!userid)
+        //     return res.json({ message: "user autherized" });
+        // else
+        //     return res.status(error.statusCode || 500).json({ message: error.message || "Internal server error" });
     } catch (error) {
         return res.status(error.statusCode || 500).json({ message: error.message || "Internal server error" });
     }
 };
-export const userProfileUpdate = async (req, res, next)=>{
+export const userProfileUpdate = async (req, res, next) => {
 
-    try{
+    try {
         const userId = req.user.id;
-        const { name, email, mobile, profilePic} = req.body;
+        const { name, email, mobile, profilePic } = req.body;
         const user = await User.findById(userId);
-        if(!user){
-            return res.status(404).json({message: "User not found"});
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
         }
 
 
@@ -132,20 +137,20 @@ export const userProfileUpdate = async (req, res, next)=>{
         user.email = email || user.email;
         user.mobile = mobile || user.mobile;
         user.profilePic = profilePic || user.profilePic;
-        
+
         await user.save();
 
         {
-            const {password,  ...userDataWithoutPassword} = user_doc;
-        return res.json({data :userDataWithoutPassword, message:"Profile updated succesfully"});
+            const { password, ...userDataWithoutPassword } = user._doc;
+            return res.json({ data: userDataWithoutPassword, message: "Profile updated succesfully" });
         }
-        
-    
 
 
 
-    }catch (error){
-        return res.status(404).json({message:error.message || "internal server error"})
+
+
+    } catch (error) {
+        return res.status(404).json({ message: error.message || "internal server error" })
 
     }
 

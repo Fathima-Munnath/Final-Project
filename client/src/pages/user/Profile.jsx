@@ -1,23 +1,61 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useFetch } from "../../hooks/UseFetch";
+//import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 import { axiosInstance } from "../../config/AxiosInstance";
-import { Link } from "react-router-dom";
 
 export const Profile = () => {
-  const [profileData] = useFetch("/user/profile");
+  const [profileData, loading] = useFetch("/user/profile");
   const [activeTab, setActiveTab] = useState("profile");
+  const [formData, setFormData] = useState({
+    profilePic: "",
+    name: "",
+    email: "",
+    mobile: "",
+    role: "",
+  });
+  useEffect(() => {
+    if (profileData) {
+      setFormData({
+        profilePic: profileData.profilePic || "https://via.placeholder.com/150",
+        name: profileData.name || "",
+        email: profileData.email || "",
+        mobile: profileData.mobile || "",
+        role: profileData.role || "",
+      });
+    }
+  }, [profileData]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true); // Show loading state
 
-  const handleLogOut = async () => {
     try {
-      await axiosInstance.get("/user/logout");
-    } catch (error) {
-      console.error(error);
+      const response = await axiosInstance.put("/user/profile-update", formData);
+      toast.success("Profile updated successfully!");
+
+      // // Update local state instantly
+      // setProfileData((prev) => ({
+      //   ...prev,
+      //   ...formData,
+      // }));
+    } 
+    catch (error) {
+      console.error("Error updating profile:", error);
+      toast.error("Failed to update profile.");
+    } 
+    finally {
+      setIsSubmitting(false);
     }
   };
 
+
   return (
     <div
-      className="flex min-h-screen bg-cover bg-center"
+      className="flex flex-col md:flex-row min-h-screen bg-cover bg-center relative"
       style={{
         backgroundImage: "url('https://source.unsplash.com/1600x900/?food,dishes')",
       }}
@@ -25,88 +63,116 @@ export const Profile = () => {
       {/* Dark Overlay */}
       <div className="absolute inset-0 bg-white/50"></div>
 
-      {/* Full-Page Container */}
-      <div className="relative flex w-full z-10">
-        
-        {/* Sidebar (30% Width) */}
-        <div className="w-1/4 bg-white shadow-xl p-8 min-h-screen">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">My Account</h2>
-          <ul className="space-y-4">
+      {/* Sidebar (25% Width on Large Screens) */}
+      <div className="relative w-full md:w-1/4 bg-white shadow-xl p-8 min-h-screen z-10">
+        <h2 className="text-2xl font-bold text-gray-800 mb-6">My Account</h2>
+        <ul className="space-y-4">
+          {["profile", "orders", "address"].map((tab) => (
             <li
-              className={`p-4 cursor-pointer rounded-lg text-lg font-semibold ${activeTab === "profile" ? "bg-green-500 text-white" : "hover:bg-gray-100"}`}
-              onClick={() => setActiveTab("profile")}
+              key={tab}
+              className={`p-4 cursor-pointer rounded-lg text-lg font-semibold ${
+                activeTab === tab ? "bg-green-500 text-white" : "hover:bg-gray-100"
+              }`}
+              onClick={() => setActiveTab(tab)}
             >
-              Profile
+              {tab === "profile" ? "Profile" : tab === "orders" ? "My Orders" : "Address"}
             </li>
-            <li
-              className={`p-4 cursor-pointer rounded-lg text-lg font-semibold ${activeTab === "orders" ? "bg-green-500 text-white" : "hover:bg-gray-100"}`}
-              onClick={() => setActiveTab("orders")}
-            >
-              My Orders
-            </li>
-            <li
-              className={`p-4 cursor-pointer rounded-lg text-lg font-semibold ${activeTab === "address" ? "bg-green-500 text-white" : "hover:bg-gray-100"}`}
-              onClick={() => setActiveTab("address")}
-            >
-              Address
-            </li>
-            <li
-              className="p-4 cursor-pointer rounded-lg text-lg font-semibold text-red-500 hover:bg-gray-100"
-              onClick={handleLogOut}
-            >
-              Logout
-            </li>
-          </ul>
-        </div>
+          ))}
+        </ul>
+      </div>
 
-        {/* Main Content Area (70% Width) */}
-        <div className="w-3/4 p-12">
-          {activeTab === "profile" && (
-            <div className="text-center">
-              <img
-                src={profileData?.profiePic || "https://via.placeholder.com/150"}
-                alt="Profile"
-                className="w-32 h-32 rounded-full border-4 border-orange-500 shadow-lg mx-auto"
-              />
-              <h2 className="text-3xl font-bold mt-6 text-gray-800">{profileData?.name}</h2>
-              <p className="text-lg text-gray-600">{profileData?.email}</p>
-              <p className="text-lg text-gray-600">{profileData?.mobile}</p>
-              <p className="text-lg text-gray-600">Role: {profileData?.role}</p>
+      {/* Main Content Area */}
+      <div className="relative w-full md:w-3/4 p-6 md:p-12 z-10">
+        {activeTab === "profile" && (
+           <div className="relative w-full md:w-3/4 p-6 md:p-12 z-10">
+           {loading ? (
+             <p className=" text-lg">Loading profile...</p>
+           ) : (
+             <div className="max-w-lg p-6 rounded-lg">
+               <div className="text-center">
+                 <img
+                   src={formData.profilePic}
+                   alt="Profile"
+                   className="w-32 h-32 rounded-full border-4 border-orange-500 shadow-lg mx-auto"
+                 />
+               </div>
+   
+               <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+                 <div>
+                   <label className="block text-gray-700 font-medium">Name</label>
+                   <input
+                     type="text"
+                     name="name"
+                     value={formData.name}
+                     onChange={handleChange}
+                     className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300"
+                   />
+                 </div>
+   
+                 <div>
+                   <label className="block text-gray-700 font-medium">Email</label>
+                   <input
+                     type="email"
+                     name="email"
+                     value={formData.email}
+                     onChange={handleChange}
+                     className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300"
+                   />
+                 </div>
+   
+                 <div>
+                   <label className="block text-gray-700 font-medium">Mobile</label>
+                   <input
+                     type="text"
+                     name="mobile"
+                     value={formData.mobile}
+                     onChange={handleChange}
+                     className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300"
+                   />
+                 </div>
+                 <button
+                   type="submit"
+                   disabled={isSubmitting}
+                   className={`w-full py-2 rounded-md transition ${isSubmitting
+                       ? "bg-gray-400 cursor-not-allowed"
+                       : "bg-blue-500 hover:bg-blue-600 text-white"
+                     }`}
+                 >
+                   {isSubmitting ? "Saving..." : "Save Changes"}
+                 </button>
+               </form>
+             </div>
+           )}
+         </div>
+        )}
 
-              <Link to="/edit-profile" className="btn bg-blue-500 text-white hover:bg-blue-600 transition mt-6">
-                Edit Profile
-              </Link>
-            </div>
-          )}
+        {activeTab === "orders" && (
+          <div>
+            <h2 className="text-3xl font-bold text-gray-800 mb-6">My Orders</h2>
+            <p className="text-lg text-gray-600">No recent orders available.</p>
+          </div>
+        )}
 
-          {activeTab === "orders" && (
-            <div>
-              <h2 className="text-3xl font-bold text-gray-800 mb-6">My Orders</h2>
-              <p className="text-lg text-gray-600">No recent orders available.</p>
-            </div>
-          )}
-
-          {activeTab === "address" && (
-            <div>
-              <h2 className="text-3xl font-bold text-gray-800 mb-6">Saved Addresses</h2>
-              <div className="space-y-6">
-                <div className="p-6 bg-gray-100 rounded-lg shadow-md">
-                  <p className="text-xl font-semibold">Home</p>
-                  <p className="text-gray-600">123, Green Street, Calicut, Kerala</p>
-                  <p className="text-gray-600">Phone: +91 9876543210</p>
+        {activeTab === "address" && (
+          <div>
+            <h2 className="text-3xl font-bold text-gray-800 mb-6">Saved Addresses</h2>
+            <div className="space-y-6">
+              {[
+                { type: "Home", address: "123, Green Street, Calicut, Kerala", phone: "+91 9876543210" },
+                { type: "Work", address: "Tech Park, InfoCity, Bangalore", phone: "+91 8765432109" },
+              ].map((addr, index) => (
+                <div key={index} className="p-6 bg-gray-100 rounded-lg shadow-md">
+                  <p className="text-xl font-semibold">{addr.type}</p>
+                  <p className="text-gray-600">{addr.address}</p>
+                  <p className="text-gray-600">Phone: {addr.phone}</p>
                 </div>
-                <div className="p-6 bg-gray-100 rounded-lg shadow-md">
-                  <p className="text-xl font-semibold">Work</p>
-                  <p className="text-gray-600">Tech Park, InfoCity, Bangalore</p>
-                  <p className="text-gray-600">Phone: +91 8765432109</p>
-                </div>
-                <button className="btn bg-orange-500 text-white hover:bg-orange-600 mt-6">
-                  Add New Address
-                </button>
-              </div>
+              ))}
+              <button className="btn bg-orange-500 text-white hover:bg-orange-600 mt-6 px-6 py-2 rounded-lg">
+                Add New Address
+              </button>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

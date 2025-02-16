@@ -12,7 +12,7 @@ router.get("/getMenu",  getMenuItems);
 router.get('/MenuDetails/:menuId' ,getMenuItemDetails);
 
 // Admin Routes (Requires restaurant authentication)
-router.post("/addMenu",  restaurantAuth, upload.single("image") , addMenuItem);  // Add menu item (Admin)
+router.post("/add-menu",  restaurantAuth, upload.single("image") , addMenuItem);  // Add menu item (Admin)
 router.put("/updateMenu/:menuId", restaurantAuth, updateMenuItem);
 router.delete("/deleteMenu/:menuId",restaurantAuth, deleteMenuItem);  // Delete menu item (Admin)
 
