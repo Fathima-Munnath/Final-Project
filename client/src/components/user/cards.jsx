@@ -18,9 +18,9 @@ export const MenuCards = ({ menuItem }) => {
       <div className="card-body p-4" onClick={() => navigate(`/menuDetails/${menuItem?._id}`)}>
         {/* Restaurant Name & Rating */}
         <div className="flex items-center justify-between">
-      <h2 className="text-sm font-bold text-gray-800 flex-grow">{menuItem?.name}</h2>
-      <p className="text-sm font-bold text-green-600 text-right">₹{menuItem?.price}</p>
-    </div>
+          <h2 className="text-sm font-bold text-gray-800 flex-grow">{menuItem?.name}</h2>
+          <p className="text-sm font-bold text-green-600 text-right">₹{menuItem?.price}</p>
+        </div>
         <p className="text-xs text-gray-700">
           {menuItem?.description?.length > 40
             ? `${menuItem?.description.substring(0, 40)}...`
@@ -34,10 +34,51 @@ export const MenuCards = ({ menuItem }) => {
             className="px-3 py-2 w-full text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300"
             onClick={() => addToCart(menuItem)}
           >
-            Add to Cart
+            Details
           </button>
         </div>
       </div>
+    </div>
+  );
+};
+
+
+export const CartCards = ({ items, handleRemove,handleQuantityChange  }) => {
+  console.log("item=====", items);
+  return (
+    <div className="flex items-center bg-gray-100 p-4 rounded-lg shadow-sm hover:shadow-md transition duration-300 mb-4">
+      {/* Item Image */}
+      <img src={items?.menuItemId?.image} alt="cart-item" className="w-24 h-20 object-cover rounded-md" />
+
+      {/* Item Details */}
+      <div className="flex-1 px-4">
+        <h2 className="text-lg font-semibold">{items?.menuItemId?.name}</h2>
+        <h3 className="text-gray-600">₹{items?.menuItemId?.price}</h3>
+      </div>
+      {/* Quantity Controls */}
+      <div className="flex items-center border rounded-md bg-white px-2">
+        <button
+          className="px-3 py-1 text-lg font-bold text-gray-600 hover:text-red-500"
+          onClick={() => handleQuantityChange(items?.menuItemId?._id, items.quantity - 1)}
+          disabled={items.quantity <= 1}
+        >
+          -
+        </button>
+        <span className="px-3 text-lg">{items.quantity}</span>
+        <button
+          className="px-3 py-1 text-lg font-bold text-gray-600 hover:text-green-500"
+          onClick={() => handleQuantityChange(items?.menuItemId?._id, items.quantity + 1)}
+        >
+          +
+        </button>
+      </div>
+      {/* Remove Button */}
+      <button
+        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-200"
+        onClick={() => handleRemove(items?.menuItemId?._id)}
+      >
+        Remove
+      </button>
     </div>
   );
 };

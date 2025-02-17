@@ -5,6 +5,7 @@ import { axiosInstance } from "../../config/AxiosInstance";
 
 export const RestaurantHeader = () => {
   const navigate = useNavigate();
+  //const [mobileNavOpen, setMobileNavOpen] = useState(false); 
 
   const handleLogOut = async () => {
       try {
@@ -17,8 +18,41 @@ export const RestaurantHeader = () => {
   
 
   return (
-    <div className="navbar bg-gradient-to-r from-green-600 to-teal-600 shadow-md px-6">
-      {/* Left - Sidebar Menu */}
+
+    // <header className="bg-gradient-to-r from-green-600 to-teal-600 text-white shadow-lg sticky top-0 w-full z-50">
+    // <div className="container mx-auto flex justify-between items-center p-5">
+    //   {/* Logo */}
+    //   <Link to="/" className="text-3xl font-extrabold tracking-wide">
+    //     🍔 FoodieHub
+    //   </Link>
+
+    //   {/* Mobile Menu Button */}
+    //   <button
+    //     className="md:hidden block focus:outline-none"
+    //     onClick={() => setMobileNavOpen(!mobileNavOpen)}
+    //   >
+    //     <Menu className="w-8 h-8" />
+    //   </button>
+
+    //     {/* Navigation (Desktop) */}
+    //     <nav className="hidden md:flex space-x-8 text-lg font-medium">
+    //       <Link to="/restaurant/dashboard" className="hover:underline">Dashboard</Link>
+    //       <Link to="/restaurant/orders" className="hover:underline">Orders</Link>
+    //       <Link to="/restaurant/addMenu" className="hover:underline">Add Menu</Link>
+    //       <Link to="//restaurant/profile" className="hover:underline">Profile</Link>
+    //     </nav>
+    //     {mobileNavOpen && (
+    //       <nav className="md:hidden bg-green-700 text-white flex flex-col items-center space-y-4 py-4">
+    //         <Link to="/restaurant/dashboard" className="hover:underline" onClick={() => setMobileNavOpen(false)}>Home</Link>
+    //         <Link to="/restaurant/orders" className="hover:underline" onClick={() => setMobileNavOpen(false)}>About</Link>
+    //         <Link to="/restaurant/addMenu" className="hover:underline" onClick={() => setMobileNavOpen(false)}>Menu</Link>
+    //         <Link to="//restaurant/profile" className="hover:underline" onClick={() => setMobileNavOpen(false)}>Profile</Link>
+    //       </nav>
+    //     )}
+    //     </div>
+    // </header>
+
+
       <div className="navbar-start">
         <div className="dropdown">
           <button tabIndex={0} className="btn btn-ghost btn-circle">
@@ -34,8 +68,7 @@ export const RestaurantHeader = () => {
             <li><a onClick={handleLogOut}>Logout</a></li>
           </ul>
         </div>
-      </div>
-
+      
       {/* Center - Logo */}
       <div className="navbar-center">
         <a className="text-2xl font-bold text-white cursor-pointer hover:text-green-700 transition" onClick={() => navigate("/restaurant/dashboard")}>
@@ -46,6 +79,6 @@ export const RestaurantHeader = () => {
       <Link to="/logout" className="block px-4 py-3 hover:bg-gray-200" onClick={handleLogOut}>Logout</Link>
       </div> */}
       {/* Right - Actions (Notifications & Profile) */}
-    </div>
+    </div> 
   );
 };

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { MenuCards } from "../../components/user/cards";
-//import { axiosInstance } from "../../config/axiosInstance";
 import { useFetch } from "../../hooks/UseFetch";
 import { MenuSkelton } from "../../components/shared/Skeltons";
+import { MenuCards } from "../../components/user/cards";
+
 
 export const Menu = () => {
   const [menuList, isLoading, error] = useFetch("/menu/getMenu");

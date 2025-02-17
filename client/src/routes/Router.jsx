@@ -16,9 +16,9 @@ import {AddMenu} from "../pages/restaurant/AddMenu";
 import  Dashboard  from "../pages/restaurant/Dashboard";
 import RestaurantOrders from "../pages/restaurant/RestaurantOrders";
 import {RestaurantProfile}  from "../pages/restaurant/RestaurantProfile";
-import Cart from "../pages/user/Cart";
+import {Cart} from "../pages/user/Cart";
 import Orders from "../pages/user/Orders";
-import Payment from "../pages/user/Payment";
+
 
 const data = {};
 
@@ -80,7 +80,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "payment/success",
-            element: <Payment />
+            element: <h2>Payment success</h2>,
           },
         ],
       },

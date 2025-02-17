@@ -30,13 +30,17 @@ export const RestaurantLayout = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-base-100">
-      {/* Dynamic Header Based on Authentication */}
+     
+      <header className="shadow-md">
       {isRestaurantAuth ? <RestaurantHeader /> : <Header /> } 
+      </header>
 
         <Outlet />
 
       {/* Footer Section */}
-      <Footer />
+      <footer className="mt-auto">
+        <Footer />
+      </footer>
     </div>
   );
 };

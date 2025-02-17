@@ -1,16 +1,13 @@
 import { Cart } from "../models/cartModel.js";
 import { MenuItem } from "../models/menuModel.js";
 
-// ✅ Get Cart for User
 export const getCart = async (req, res) => {
     try {
         const { user } = req;
         const cart = await Cart.findOne({ userId: user.id }).populate("items.menuItemId");
-
         if (!cart) {
             return res.status(404).json({ message: "Cart is empty" });
         }
-
         res.json({ message: "Cart details fetched", data: cart });
     } catch (error) {
         console.error(error);
@@ -18,65 +15,53 @@ export const getCart = async (req, res) => {
     }
 };
 
-// ✅ Get Cart Items
 export const getCartItems = async (req, res) => {
     try {
-        const { user } = req;
-        const cart = await Cart.findOne({ userId: user.id }).populate("items.menuItemId");
+        const userId = req.user.id;
+        const cart = await Cart.findOne({ userId }).populate("items.menuItemId");
 
         if (!cart) {
             return res.status(404).json({ message: "Cart is empty" });
         }
 
-        res.json({ message: "Cart items fetched", data: cart.items });
+        res.status(200).json({ message: "Cart items fetched", data: cart });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: error.message || "Internal server error" });
     }
 };
 
-
-// ✅ Add Menu Item to Cart (Increases quantity if exists)
 export const addItemToCart = async (req, res) => {
     try {
         const userId = req.user.id;
-        const { restaurantId, menuItemId, quantity } = req.body;
-
-        // Check if the menu item exists
+        const { menuItemId,quantity } = req.body;
+        // Find the course to ensure it exists and fetch its price
         const menuItem = await MenuItem.findById(menuItemId);
         if (!menuItem) {
             return res.status(404).json({ message: "Menu item not found" });
         }
 
-        // Find the user's cart
-        let cart = await Cart.findOne({ userId });
+        // Find the user's cart or create a new one if it doesn't exist
+        let AddingItem = await Cart.findOne({userId });
 
-        if (!cart) {
-            // If no cart exists, create a new one
-            cart = new Cart({
+        if (!AddingItem) {
+            AddingItem = new Cart({
                 userId,
-                restaurantId,
-                items: [{ menuItemId, quantity, price: menuItem.price }]
+                items: [{restaurantId: menuItem.restaurantId, menuItemId, quantity, price: menuItem.price }]
             });
-        } else {
-            // Check if the menu item already exists in the cart
-            const existingItem = cart.items.find(item => item.menuItemId.equals(menuItemId));
-
-            if (existingItem) {
-                // If item exists, increase the quantity
-                existingItem.quantity += quantity;
+        }
+        else
+        {
+            const existingItemIndex = AddingItem.items.findIndex(item => item.menuItemId.toString() === menuItemId.toString());
+            if (existingItemIndex > -1) {
+                return res.status(400).json({ message: "Menu item already in cart" });
             } else {
-                // If item doesn't exist, add it to the cart
-                cart.items.push({ menuItemId, quantity, price: menuItem.price });
+                AddingItem.items.push({ restaurantId: menuItem.restaurantId, menuItemId, quantity, price: menuItem.price });
             }
         }
-
-        // Recalculate total price
-        cart.calculateTotalPrice();
-        await cart.save();
-
-        res.status(200).json({ message: "Item added to cart", data: cart });
-
+        AddingItem.calculateTotalPrice();
+        await AddingItem.save();
+        res.status(200).json({ data: AddingItem, message: "Menu item added to cart" });
     } catch (error) {
         res.status(500).json({ message: "Internal server error", error });
     }
@@ -117,18 +102,14 @@ export const updateCartItem = async (req, res) => {
 export const removeCartItem = async (req, res) => {
     try {
         const userId = req.user.id;
-        const { menuItemId } = req.body;
-
+        const { menuItemId } = req.params;
         let cart = await Cart.findOne({ userId });
         if (!cart) {
             return res.status(404).json({ message: "Cart not found" });
         }
-
         cart.items = cart.items.filter(item => !item.menuItemId.equals(menuItemId));
-
         cart.calculateTotalPrice();
         await cart.save();
-
         res.status(200).json({ message: "Item removed from cart", data: cart });
     } catch (error) {
         res.status(500).json({ message: "Internal server error", error });

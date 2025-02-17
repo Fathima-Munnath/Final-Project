@@ -49,7 +49,7 @@ const UserHeader = () => {
         {/* Right Icons */}
         <div className="flex items-center space-x-6">
           {/* Cart Icon */}
-          <Link to="/cart" className="relative">
+          <Link to="/user/cart" className="relative">
             <ShoppingCart className="w-7 h-7" />
             <span className="absolute -top-2 -right-2 bg-white text-red-500 text-xs px-2 py-0.5 rounded-full font-bold shadow-md">
               3

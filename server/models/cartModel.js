@@ -7,13 +7,13 @@ const cartSchema = new Schema(
             ref: "User",
             required: true,
         },
-        restaurantId: {
-            type: Schema.Types.ObjectId,
-            ref: "Restaurant",
-            required: true,
-        },
         items: [
             {
+                restaurantId: {
+                    type: Schema.Types.ObjectId,
+                    ref: "Restaurant",
+                    required: true,
+                },
                 menuItemId: {
                     type: Schema.Types.ObjectId,
                     ref: "MenuItem",
