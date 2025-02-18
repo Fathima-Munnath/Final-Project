@@ -104,6 +104,7 @@ export const AddMenuForm = ({ menuItem }) => {
               <option value="Main Course">Main Course</option>
               <option value="Desserts">Desserts</option>
               <option value="Beverages">Beverages</option>
+              <option value="Beverages">snack</option>
             </select>
             {errors.category && <span className="text-red-500 text-sm mt-1">{errors.category.message}</span>}
           </div>

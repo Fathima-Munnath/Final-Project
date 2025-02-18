@@ -6,17 +6,27 @@ const router = e.Router();
 
 const stripe = new Stripe(process.env.Stripe_Private_Api_Key);
 const client_domain = process.env.CLIENT_DOMAIN;
-
 router.post("/create-checkout-session", userAuth, async (req, res, next) => {
     try {
         const userId = req.user.id;
         const { products } = req.body;
 
+        if (!products || products.length === 0) {
+            return res.status(400).json({ message: "No products found in the request." });
+        }
+
+        const totalAmount = products.reduce((sum, product) => sum + (product?.menuItemId?.price || 0), 0) * 100; // in paise
+        const restaurantId = products[0]?.menuItemId?.restaurantId; // Assuming all products are from the same restaurant
+
+        if (!restaurantId) {
+            return res.status(400).json({ message: "Restaurant ID is required." });
+        }
+
         const lineItems = products.map((product) => ({
             price_data: {
                 currency: "inr",
                 product_data: {
-                    name: product?.menuItemId?.title,
+                    name: product?.menuItemId?.name,
                     images: [product?.menuItemId?.image],
                 },
                 unit_amount: Math.round(product?.menuItemId?.price * 100),
@@ -32,14 +42,21 @@ router.post("/create-checkout-session", userAuth, async (req, res, next) => {
             cancel_url: `${client_domain}/user/payment/cancel`,
         });
 
-        const newOrder = new Order({ userId, sessionId: session?.id });
-        await newOrder.save()
+        const newOrder = new Order({ 
+            userId, 
+            sessionId: session?.id, 
+            totalAmount: totalAmount, 
+            restaurantId: restaurantId 
+        });
+
+        await newOrder.save();
 
         res.json({ success: true, sessionId: session.id });
     } catch (error) {
         return res.status(error.statusCode || 500).json({ message: error.message || "Internal server error" });
     }
 });
+
 
 router.get("/session-status", async (req, res) => {
     try {

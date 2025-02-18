@@ -53,7 +53,7 @@ export const RestaurantHeader = () => {
     // </header>
 
 
-      <div className="navbar-start">
+      <div className="navbar-start bg-gradient-to-r from-green-600 to-teal-600  w-full ">
         <div className="dropdown">
           <button tabIndex={0} className="btn btn-ghost btn-circle">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -70,15 +70,12 @@ export const RestaurantHeader = () => {
         </div>
       
       {/* Center - Logo */}
-      <div className="navbar-center">
-        <a className="text-2xl font-bold text-white cursor-pointer hover:text-green-700 transition" onClick={() => navigate("/restaurant/dashboard")}>
-        🍔 FoodieHub
-        </a>
+      <div className="navbar-center text-2xl font-bold text-white cursor-pointer hover:text-green-700 transition align-center">
+        
+   🍔 FoodieHub
+        
       </div>
-      {/* <div>
-      <Link to="/logout" className="block px-4 py-3 hover:bg-gray-200" onClick={handleLogOut}>Logout</Link>
-      </div> */}
-      {/* Right - Actions (Notifications & Profile) */}
+      
     </div> 
   );
 };

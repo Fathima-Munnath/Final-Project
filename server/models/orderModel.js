@@ -12,6 +12,10 @@ const orderSchema = new mongoose.Schema(
       ref: 'Restaurant',
       required: true,
     },
+    sessionId: {
+      type: String,
+      required: true,
+  },
     items: [
       {
         menuItemId: {

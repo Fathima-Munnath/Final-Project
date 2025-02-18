@@ -14,23 +14,29 @@ export const Cart = () => {
     console.log(cartDetails);
     
     const makePayment = async () => {
-        try {
-            const stripe = await loadStripe(import.meta.env.VITE_STRIPE_Publishable_key);
-
-            const session = await axiosInstance({
-                url: "/payment/create-checkout-session",
-                method: "POST",
-                data: { products: cartDetails?.menuItems },
-            });
-
-            console.log(session, "=======session");
-            const result = stripe.redirectToCheckout({
-                sessionId: session.data.sessionId,
-            });
-        } catch (error) {
-            console.log(error);
-        }
-    };
+      try {
+          if (!cartDetails?.items || cartDetails?.items?.length === 0) {
+              toast.error("Your cart is empty!");
+              return;
+          }
+  
+          const stripe = await loadStripe(import.meta.env.VITE_STRIPE_Publishable_key);
+  
+          const session = await axiosInstance.post("/payment/create-checkout-session", {
+              products: cartDetails?.items,
+          });
+  
+          if (!session?.data?.sessionId) {
+              throw new Error("Invalid session response from server.");
+          }
+  
+          await stripe.redirectToCheckout({ sessionId: session.data.sessionId });
+      } catch (error) {
+          console.error(error);
+          toast.error("Payment failed. Please try again.");
+      }
+  };
+  
 
     const handleRemoveCartItem = async (menuItemId) => {
         try {
