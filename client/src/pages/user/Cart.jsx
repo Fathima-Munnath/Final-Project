@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useFetch } from "../../hooks/UseFetch";
-import { CartCards } from "../../components/user/Cards";
+import { CartCards } from "../../components/user/cards";
 import toast from "react-hot-toast";
 import { axiosInstance } from "../../config/AxiosInstance";
 import { loadStripe } from "@stripe/stripe-js";
