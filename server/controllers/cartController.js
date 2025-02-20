@@ -35,6 +35,7 @@ export const addItemToCart = async (req, res) => {
     try {
         const userId = req.user.id;
         const { menuItemId,quantity } = req.body;
+
         // Find the course to ensure it exists and fetch its price
         const menuItem = await MenuItem.findById(menuItemId);
         if (!menuItem) {
@@ -53,6 +54,7 @@ export const addItemToCart = async (req, res) => {
         else
         {
             const existingItemIndex = AddingItem.items.findIndex(item => item.menuItemId.toString() === menuItemId.toString());
+
             if (existingItemIndex > -1) {
                 return res.status(400).json({ message: "Menu item already in cart" });
             } else {

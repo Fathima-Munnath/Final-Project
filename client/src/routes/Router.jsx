@@ -13,11 +13,11 @@ import { ProtectedRoute } from "./ProtectedRoute";
 import { ProtectedRouteRestaurant } from "./ProtectedRouteRestaurant";
 import { Profile } from '../pages/user/Profile';
 import {AddMenu} from "../pages/restaurant/AddMenu";
-import  Dashboard  from "../pages/restaurant/Dashboard";
-import RestaurantOrders from "../pages/restaurant/RestaurantOrders";
+import  {Dashboard}  from "../pages/restaurant/Dashboard";
+import {RestaurantOrders} from "../pages/restaurant/RestaurantOrders";
 import {RestaurantProfile}  from "../pages/restaurant/RestaurantProfile";
 import {Cart} from "../pages/user/Cart";
-import Orders from "../pages/user/Orders";
+import {Orders}  from "../pages/user/Orders";
 
 
 const data = {};
@@ -109,7 +109,7 @@ export const router = createBrowserRouter([
             element:<Dashboard />
           },
           {
-            path: "all-menuItems",
+            path: "all-orders",
             element: <RestaurantOrders />
           },
           {

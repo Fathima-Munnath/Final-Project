@@ -6,7 +6,6 @@ import toast from "react-hot-toast";
 export const MenuDetails = () => {
     const params = useParams();
     const { menuItemId } = params;
-
     const [menuDetails, setMenuDetails] = useState({});
 
     const fetchMenuDetails = async () => {
@@ -36,7 +35,6 @@ export const MenuDetails = () => {
                 url: "/cart/add-to-cart",
                 data: {  menuItemId, quantity },
             });
-            console.log(response);
             toast.success("Menu added to cart");
         } catch (error) {
             console.log(error);

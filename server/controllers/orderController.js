@@ -2,6 +2,8 @@ import { Order } from "../models/orderModel.js";
 import { User } from "../models/userModel.js";
 import { Restaurant } from "../models/restaurantModel.js";
 import { MenuItem } from "../models/menuModel.js";
+import Stripe from "stripe";
+const stripe = new Stripe(process.env.Stripe_Private_Api_Key);
 
 // Create a new order
 export const createOrder = async (req, res) => {
@@ -48,31 +50,69 @@ export const createOrder = async (req, res) => {
 };
 
 // Get order details by order ID
-export const getOrderDetails = async (req, res) => {
+export const getOrders= async (req, res) => {
     try {
-        const orderId = req.params.orderId;
-        const order = await Order.findById(orderId).populate("items.menuItemId");
-        if (!order) {
-            return res.status(404).json({ message: "Order not found" });
+        const  userId = req.user.id; // Get userId from query params
+        //return res.status(200).json({data:userId, message:"kittatha user id"});
+        if (!userId) {
+            return res.status(400).json({ message: "User ID is required" });
         }
-        res.status(200).json(order);
+
+        const orders = await Order.find({ userId }).populate("items.menuItemId"); // Fetch only user-specific orders
+        return res.status(200).json({data: orders});
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error("Error fetching user orders:", error);
+        return res.status(500).json({ message: "Internal server error" });
     }
 };
 
 // Get all orders for a restaurant
+// export const getAllOrders = async (req, res) => {
+//     try {
+//         let restaurantId = req.restaurant.id;
+//         const orderList = await Order.find({ restaurantId })
+//             .populate("restaurantId").populate("userId").populate("sessionId");
+//         if (!orderList.length) {
+//             return res.status(404).json({ message: "No orders found for this restaurant" });
+//         }
+//         return res.status(200).json({ data: orderList, message: "All orders fetched" })
+//     } catch (error) {
+//         res.status(500).json({ message: error.message });
+//     }
+// };
 export const getAllOrders = async (req, res) => {
     try {
-        console.log("User Object:", req.user); // Debugging log
-        if (!req.user || !req.user.id) {
-            return res.status(401).json({ message: "Unauthorized: No user ID found" });
-        }
+        let restaurantId = req.restaurant.id;
 
-        const restaurantId = req.user.id;
-        const orders = await Order.find({ restaurantId }).populate("userId").populate("items.menuItemId");
-        res.status(200).json(orders);
+
+        // Find orders for the restaurant
+        const orderList = await Order.find({ restaurantId })
+        .populate("restaurantId").populate("userId").populate("items.menuItemId");
+
+        if (!orderList.length) {
+            return res.status(404).json({ message: "No orders found for this restaurant" });
+        }
+        //#region productDetailsFromSessionID
+        // // Fetch order details from Stripe
+        // const ordersWithItems = await Promise.all(orderList.map(async (order) => {
+        //     try {
+        //         const session = await stripe.checkout.sessions.retrieve(order.sessionId);
+        //         const lineItems = await stripe.checkout.sessions.listLineItems(order.sessionId);
+        //         return {
+        //             ...order._doc,
+        //             stripeSession: session,
+        //             items: lineItems.data, // Ordered items from Stripe
+        //         };
+        //     } catch (error) {
+        //         console.error("Error fetching Stripe session:", error);
+        //         return { ...order._doc, stripeSession: null, items: [] };
+        //     }
+        // }));
+        //#endregion
+        return res.status(200).json({ data: orderList, message: "All orders fetched" });
+
     } catch (error) {
+        console.error("Error fetching orders:", error);
         res.status(500).json({ message: error.message });
     }
 };

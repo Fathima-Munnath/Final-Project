@@ -37,10 +37,8 @@ export const addMenuItem = async (req, res, next) => {
 
 export const getMenuItems = async (req, res, next) => {
     try {
-
         const menuList = await MenuItem.find().populate("restaurantId", "name location mobile email");
         return res.json({ data: menuList, message: "menuList fetched" })
-
     }
     catch (error) {
         return res.status(error.statusCode || 500).json({ message: error.message || "Internal server error" });
@@ -98,10 +96,6 @@ export const updateMenuItem = async (req, res, next) => {
         return res.status(500).json({ message: error.message || "Internal server error" });
     }
 };
-
-
-
-
 export const deleteMenuItem = async (req, res, next) => {
     try {
         const { menuId } = req.params;
@@ -127,5 +121,21 @@ export const deleteMenuItem = async (req, res, next) => {
     }
 };
 
+
+export const RestaurantMenuItems = async (req, res) => {
+    try {
+        const  restaurantId = req.restaurant.id; // Get userId from query params
+        //return res.status(200).json({data:userId, message:"kittatha user id"});
+        if (! restaurantId) {
+            return res.status(400).json({ message: "Restaurant ID is required" });
+        }
+
+        const menuItems = await MenuItem.find({  restaurantId }).populate(); // Fetch only user-specific orders
+        return res.status(200).json({data:menuItems });
+    } catch (error) {
+        console.error("Error fetching menuItems:", error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+};
 
 

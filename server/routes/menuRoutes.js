@@ -1,8 +1,9 @@
 import express from "express";
 const router = express.Router();
-import { addMenuItem, getMenuItems,  getMenuItemDetails , updateMenuItem, deleteMenuItem} from "../controllers/menuController.js";
+import { addMenuItem, getMenuItems,  getMenuItemDetails , updateMenuItem, deleteMenuItem, RestaurantMenuItems} from "../controllers/menuController.js";
 import { restaurantAuth } from "../middleware/restaurantAuth.js";
 import { upload } from "../middleware/multer.js";
+
 
 
 
@@ -15,5 +16,6 @@ router.get('/MenuDetails/:menuId' ,getMenuItemDetails);
 router.post("/add-menu",  restaurantAuth, upload.single("image") , addMenuItem);  // Add menu item (Admin)
 router.put("/updateMenu/:menuId", restaurantAuth, updateMenuItem);
 router.delete("/deleteMenu/:menuId",restaurantAuth, deleteMenuItem);  // Delete menu item (Admin)
+router.get("/get-restaurant-menu-items",restaurantAuth,RestaurantMenuItems)
 
 export  { router as menuRouter };

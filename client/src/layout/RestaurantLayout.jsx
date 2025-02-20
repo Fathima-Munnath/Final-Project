@@ -11,9 +11,6 @@ export const RestaurantLayout = () => {
   const { isRestaurantAuth } = useSelector((state) => state.restaurant); // Ensure correct slice
   const dispatch = useDispatch();
   const location = useLocation();
-
-  console.log("isRestaurantAuth====", isRestaurantAuth);
-
   const checkRestaurant = async () => {
     try {
       const response = await axiosInstance.get("/restaurant/check-restaurant");

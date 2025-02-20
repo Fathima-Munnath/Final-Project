@@ -1,10 +1,30 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { axiosInstance } from "../../config/AxiosInstance";
+import toast from "react-hot-toast";
 
 export const MenuCards = ({ menuItem }) => {
   console.log("menuCard======", menuItem);
   const navigate = useNavigate();
 
+  const addToCart = async (menuItem) => {
+    try {
+      let quantity = 1;
+      let menuId = menuItem?._id
+      console.log("menuId:" + menuItem?._id);
+
+      const response = await axiosInstance({
+        method: "POST",
+        url: "/cart/add-to-cart",
+        data: { menuItemId: menuId, quantity },
+      });
+      console.log(response);
+      toast.success("Menu added to cart");
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.message);
+    }
+  };
   return (
     <div className="card bg-base-100 w-full max-w-xs rounded-lg overflow-hidden transition-transform duration-300 hover:scale-105">
       <figure
@@ -32,9 +52,12 @@ export const MenuCards = ({ menuItem }) => {
           <button
             type="button"
             className="px-3 py-2 w-full text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300"
-            onClick={() => addToCart(menuItem)}
+            onClick={(event) => {
+              event.stopPropagation(); // Prevent click event from bubbling to parent div
+              addToCart(menuItem);
+            }}
           >
-            Details
+            Add to Cart
           </button>
         </div>
       </div>
@@ -43,7 +66,7 @@ export const MenuCards = ({ menuItem }) => {
 };
 
 
-export const CartCards = ({ items, handleRemove,handleQuantityChange  }) => {
+export const CartCards = ({ items, handleRemove, handleQuantityChange }) => {
   console.log("item=====", items);
   return (
     <div className="flex items-center bg-gray-100 p-4 rounded-lg shadow-sm hover:shadow-md transition duration-300 mb-4">

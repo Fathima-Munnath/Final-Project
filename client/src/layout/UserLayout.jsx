@@ -12,14 +12,9 @@ export const UserLayout = () => {
   const { isRestaurantAuth } = useSelector((state) => state.restaurant);
   const dispatch = useDispatch();
   const location = useLocation();
-  console.log("isUserAuth====", isUserAuth);
-  console.log("isRestAuth====", isRestaurantAuth);
-
   const checkUser = async () => {
     try {
       const response = await axiosInstance.get("/user/check-user");
-      console.log(response);
-
       dispatch(saveUser(response.data)); // Ensure proper user data is saved
     } catch (error) {
       dispatch(clearUser());

@@ -1,45 +1,29 @@
 import React from 'react'
+import { useFetch } from "../../hooks/UseFetch";
+import { MenuCards } from "../../components/restaurant/Card";
+import { MenuSkelton } from "../../components/shared/Skeltons";
 
-function Dashboard() {
+
+export const Dashboard = () => {
+  const [meuItems,isLoading,error]=useFetch("/menu/get-restaurant-menu-items")
+  //console.log("restaurant menu===",meuItems);
   return (
-    <div><div class="category-filter">
-    <select id="category-select">
-      <option value="all">All Categories</option>
-      <option value="starters">Starters</option>
-      <option value="mains">Mains</option>
-      <option value="desserts">Desserts</option>
-      <option value="beverages">Beverages</option>
-    </select>
-  </div>
+    <div>
+          {isLoading ? (
+            <MenuSkelton />
+          ) : (
+            <div className="min-h-screen bg-base-100 flex flex-col items-center py-10 px-4">
+              <section className="w-full max-w-7xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 justify-items-center">
+                {meuItems?.map((menuItem, index) => (
+                  <MenuCards key={menuItem?._id} menuItem={menuItem} />
+                ))}
+              </section>
+            </div>
+          )}
+        </div>
+      );
+    };
+    
+  
 
-  <div class="menu-items-list">
-   
-    <div class="menu-item">
-      <h4>Item Name</h4>
-      <p>Price: $10</p>
-      <button>Edit</button>
-      <button>Delete</button>
-    </div>
-   
-  </div>
-
- 
-  <div class="add-item-form">
-    <input type="text" placeholder="Item Name" />
-    <textarea placeholder="Item Description"></textarea>
-    <input type="number" placeholder="Price" />
-    <select>
-      <option value="starters">Starters</option>
-      <option value="mains">Mains</option>
-      <option value="desserts">Desserts</option>
-      <option value="beverages">Beverages</option>
-    </select>
-    <button>Save Item</button>
-  </div>
-</div>
-
-  )
-}
-
-export default Dashboard
 

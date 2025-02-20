@@ -123,7 +123,6 @@ export const checkUser = async (req, res, next) => {
     }
 };
 export const userProfileUpdate = async (req, res, next) => {
-
     try {
         const userId = req.user.id;
         const { name, email, mobile, profilePic } = req.body;
@@ -131,27 +130,16 @@ export const userProfileUpdate = async (req, res, next) => {
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
-
-
         user.name = name || user.name;
         user.email = email || user.email;
         user.mobile = mobile || user.mobile;
         user.profilePic = profilePic || user.profilePic;
-
         await user.save();
-
         {
             const { password, ...userDataWithoutPassword } = user._doc;
             return res.json({ data: userDataWithoutPassword, message: "Profile updated succesfully" });
         }
-
-
-
-
-
     } catch (error) {
         return res.status(404).json({ message: error.message || "internal server error" })
-
     }
-
 };

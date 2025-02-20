@@ -1,4 +1,4 @@
-import mongoose, { Schema }  from "mongoose"
+import mongoose, { Schema } from "mongoose"
 
 const orderSchema = new mongoose.Schema(
   {
@@ -15,7 +15,7 @@ const orderSchema = new mongoose.Schema(
     sessionId: {
       type: String,
       required: true,
-  },
+    },
     items: [
       {
         menuItemId: {
@@ -40,7 +40,7 @@ const orderSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['Pending', 'Delivered', 'Cancelled'],
+      enum: ['Pending', 'Dispatched', 'Cancelled'],
       default: 'Pending',
     },
     orderDate: {

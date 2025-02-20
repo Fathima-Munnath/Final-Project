@@ -7,12 +7,7 @@ import { loadStripe } from "@stripe/stripe-js";
 
 export const Cart = () => {
     const [refreshState, setRefreshState] = useState(false);
-
     const [cartDetails, isLoading, error] = useFetch("/cart/get-cart", refreshState);
-   
-
-    console.log(cartDetails);
-    
     const makePayment = async () => {
       try {
           if (!cartDetails?.items || cartDetails?.items?.length === 0) {
@@ -21,7 +16,6 @@ export const Cart = () => {
           }
   
           const stripe = await loadStripe(import.meta.env.VITE_STRIPE_Publishable_key);
-  
           const session = await axiosInstance.post("/payment/create-checkout-session", {
               products: cartDetails?.items,
           });

@@ -36,7 +36,7 @@ export const RestaurantProfile = () => {
     setIsSubmitting(true);
 
     try {
-      await axiosInstance.put("/user/profile-update", formData);
+      await axiosInstance.put("/restaurant/profile-update", formData);
       toast.success("Profile updated successfully!");
     } catch (error) {
       console.error("Error updating profile:", error);

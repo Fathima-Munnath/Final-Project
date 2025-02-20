@@ -10,7 +10,6 @@ router.post("/create-checkout-session", userAuth, async (req, res, next) => {
     try {
         const userId = req.user.id;
         const { products } = req.body;
-
         if (!products || products.length === 0) {
             return res.status(400).json({ message: "No products found in the request." });
         }
@@ -28,10 +27,15 @@ router.post("/create-checkout-session", userAuth, async (req, res, next) => {
                 product_data: {
                     name: product?.menuItemId?.name,
                     images: [product?.menuItemId?.image],
+                    description: product?.menuItemId?.description,
+                    metadata: {
+                        menuItemId: product?.menuItemId?._id?.toString(),
+                        restaurantId: product?.menuItemId?.restaurantId?.toString(),
+                    },
                 },
                 unit_amount: Math.round(product?.menuItemId?.price * 100),
             },
-            quantity: 1,
+            quantity: product?.quantity,
         }));
 
         const session = await stripe.checkout.sessions.create({
@@ -45,8 +49,13 @@ router.post("/create-checkout-session", userAuth, async (req, res, next) => {
         const newOrder = new Order({ 
             userId, 
             sessionId: session?.id, 
-            totalAmount: totalAmount, 
-            restaurantId: restaurantId 
+            totalAmount: totalAmount,
+            restaurantId: restaurantId,
+            items: products.map(product => ({
+                menuItemId: product?.menuItemId?._id,  // Store the actual menu item ID
+                quantity: product?.quantity || 1,  // Ensure quantity is included
+                price: product?.menuItemId?.price || 0, // Store the price per unit
+            })),
         });
 
         await newOrder.save();
@@ -61,7 +70,11 @@ router.post("/create-checkout-session", userAuth, async (req, res, next) => {
 router.get("/session-status", async (req, res) => {
     try {
         const sessionId = req.query.session_id;
+        if (!sessionId) {
+            return res.status(400).json({ error: "session_id is required" });
+        }
         const session = await stripe.checkout.sessions.retrieve(sessionId);
+        
 
         console.log("session=====", session);
 

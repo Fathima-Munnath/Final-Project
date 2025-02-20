@@ -19,7 +19,7 @@ export const Login = ({ role }) => {
             loginAPI: "/restaurant/login",
             profileRoute: "/restaurant/profile",
             signupRoute: "/restaurant/signup",
-            homeRoute: "/restaurant/profile",
+            homeRoute: "/restaurant/dashboard",
         }
         : {
             role: "user",
