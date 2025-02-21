@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useFetch } from "../../hooks/UseFetch";
 import toast from "react-hot-toast";
 import { axiosInstance } from "../../config/AxiosInstance";
-import { useNavigate } from "react-router-dom";
+import AddressForm from "../../components/user/AddressForm";
+import { Orders } from "../../components/user/Orders";
 
 export const Profile = () => {
   const [profileData, loading] = useFetch("/user/profile");
   const [activeTab, setActiveTab] = useState("profile");
-  const navigate = useNavigate();
+  const [showAddressForm, setShowAddressForm] = useState(false);
 
   const [formData, setFormData] = useState({
     profilePic: "",
@@ -37,7 +38,7 @@ export const Profile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true); // Show loading state
+    setIsSubmitting(true);
 
     try {
       await axiosInstance.put("/user/profile-update", formData);
@@ -51,37 +52,25 @@ export const Profile = () => {
   };
 
   return (
-    <div
-      className="flex flex-col md:flex-row min-h-screen bg-cover bg-center relative"
-      style={{
-        backgroundImage: "url('https://source.unsplash.com/1600x900/?food,dishes')",
-      }}
-    >
-      {/* Dark Overlay */}
-      <div className="absolute inset-0 bg-white/50"></div>
-
+    <div className="flex flex-col md:flex-row min-h-screen bg-cover bg-center relative">
       {/* Sidebar */}
-      <div className="relative w-full md:w-1/4 bg-white shadow-xl p-8 min-h-screen z-10">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">My Account</h2>
-        <ul className="space-y-4">
+      <div className="relative w-full md:w-1/4 bg-white shadow-xl p-4 md:p-8 h-auto z-10">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4 md:mb-6">My Account</h2>
+        <ul className="space-y-2 md:space-y-4">
           <li
-            className={`p-4 cursor-pointer rounded-lg text-lg font-semibold ${
-              activeTab === "profile" ? "bg-green-500 text-white" : "hover:bg-gray-100"
-            }`}
+            className={`p-3 md:p-4 cursor-pointer rounded-lg text-sm md:text-lg font-semibold ${activeTab === "profile" ? "bg-green-500 text-white" : "hover:bg-gray-100"}`}
             onClick={() => setActiveTab("profile")}
           >
             Profile
           </li>
           <li
-            className="p-4 cursor-pointer rounded-lg text-lg font-semibold hover:bg-gray-100"
-            onClick={() => navigate("/user/orders")}
+            className={`p-3 md:p-4 cursor-pointer rounded-lg text-sm md:text-lg font-semibold ${activeTab === "orders" ? "bg-green-500 text-white" : "hover:bg-gray-100"}`}
+            onClick={() => setActiveTab("orders")}
           >
             My Orders
           </li>
           <li
-            className={`p-4 cursor-pointer rounded-lg text-lg font-semibold ${
-              activeTab === "address" ? "bg-green-500 text-white" : "hover:bg-gray-100"
-            }`}
+            className={`p-3 md:p-4 cursor-pointer rounded-lg text-sm md:text-lg font-semibold ${activeTab === "address" ? "bg-green-500 text-white" : "hover:bg-gray-100"}`}
             onClick={() => setActiveTab("address")}
           >
             Address
@@ -90,9 +79,9 @@ export const Profile = () => {
       </div>
 
       {/* Main Content */}
-      <div className="relative w-full md:w-3/4 p-6 md:p-12 z-10">
+      <div className="relative w-full md:w-3/4 p-4 md:p-6 z-10 h-full">
         {activeTab === "profile" && (
-          <div className="relative w-full md:w-3/4 p-6 md:p-12 z-10">
+          <div className="relative w-full p-4 md:p-6">
             {loading ? (
               <p className="text-lg">Loading profile...</p>
             ) : (
@@ -101,7 +90,7 @@ export const Profile = () => {
                   <img
                     src={formData.profilePic}
                     alt="Profile"
-                    className="w-32 h-32 rounded-full border-4 border-orange-500 shadow-lg mx-auto"
+                    className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-orange-500 shadow-lg mx-auto"
                   />
                 </div>
 
@@ -142,11 +131,10 @@ export const Profile = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className={`w-full py-2 rounded-md transition ${
-                      isSubmitting
-                        ? "bg-gray-400 cursor-not-allowed"
-                        : "bg-blue-500 hover:bg-blue-600 text-white"
-                    }`}
+                    className={`w-full py-2 rounded-md transition ${isSubmitting
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-blue-500 hover:bg-blue-600 text-white"
+                      }`}
                   >
                     {isSubmitting ? "Saving..." : "Save Changes"}
                   </button>
@@ -155,27 +143,8 @@ export const Profile = () => {
             )}
           </div>
         )}
-
-        {activeTab === "address" && (
-          <div>
-            <h2 className="text-3xl font-bold text-gray-800 mb-6">Saved Addresses</h2>
-            <div className="space-y-6">
-              {[
-                { type: "Home", address: "123, Green Street, Calicut, Kerala", phone: "+91 9876543210" },
-                { type: "Work", address: "Tech Park, InfoCity, Bangalore", phone: "+91 8765432109" },
-              ].map((addr, index) => (
-                <div key={index} className="p-6 bg-gray-100 rounded-lg shadow-md">
-                  <p className="text-xl font-semibold">{addr.type}</p>
-                  <p className="text-gray-600">{addr.address}</p>
-                  <p className="text-gray-600">Phone: {addr.phone}</p>
-                </div>
-              ))}
-              <button className="btn bg-orange-500 text-white hover:bg-orange-600 mt-6 px-6 py-2 rounded-lg">
-                Add New Address
-              </button>
-            </div>
-          </div>
-        )}
+        {activeTab === "orders" && <Orders />}
+        {activeTab === "address" && <AddressForm />}
       </div>
     </div>
   );

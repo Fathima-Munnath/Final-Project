@@ -1,7 +1,12 @@
 import mongoose, { Schema } from "mongoose"
 
 const addressSchema = new mongoose.Schema({
-  street: {
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+},
+ houseName: {
     type: String,
     required: true
   },
@@ -17,10 +22,10 @@ const addressSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  country: {
+  mobile: {
     type: String,
     required: true,
-    default: "India"
+   
   },
   landmark: {
     type: String

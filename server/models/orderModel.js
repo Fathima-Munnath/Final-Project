@@ -12,6 +12,12 @@ const orderSchema = new mongoose.Schema(
       ref: 'Restaurant',
       required: true,
     },
+    addressId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Address',
+      required: true,
+    },
+
     sessionId: {
       type: String,
       required: true,

@@ -9,10 +9,14 @@ const client_domain = process.env.CLIENT_DOMAIN;
 router.post("/create-checkout-session", userAuth, async (req, res, next) => {
     try {
         const userId = req.user.id;
-        const { products } = req.body;
+        const { products,addressId } = req.body;
         if (!products || products.length === 0) {
             return res.status(400).json({ message: "No products found in the request." });
         }
+        if (!addressId) {
+            return res.status(400).json({ message: "Address ID is required." });
+        }
+
 
         const totalAmount = products.reduce((sum, product) => sum + (product?.menuItemId?.price || 0), 0) * 100; // in paise
         const restaurantId = products[0]?.menuItemId?.restaurantId; // Assuming all products are from the same restaurant
@@ -51,6 +55,7 @@ router.post("/create-checkout-session", userAuth, async (req, res, next) => {
             sessionId: session?.id, 
             totalAmount: totalAmount,
             restaurantId: restaurantId,
+            addressId,
             items: products.map(product => ({
                 menuItemId: product?.menuItemId?._id,  // Store the actual menu item ID
                 quantity: product?.quantity || 1,  // Ensure quantity is included

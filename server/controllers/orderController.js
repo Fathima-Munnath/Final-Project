@@ -1,7 +1,8 @@
 import { Order } from "../models/orderModel.js";
-import { User } from "../models/userModel.js";
+//import { User } from "../models/userModel.js";
 import { Restaurant } from "../models/restaurantModel.js";
 import { MenuItem } from "../models/menuModel.js";
+//import {Address } from ("../models/Address");
 import Stripe from "stripe";
 const stripe = new Stripe(process.env.Stripe_Private_Api_Key);
 
@@ -58,7 +59,10 @@ export const getOrders= async (req, res) => {
             return res.status(400).json({ message: "User ID is required" });
         }
 
-        const orders = await Order.find({ userId }).populate("items.menuItemId"); // Fetch only user-specific orders
+        const orders = await Order.find({ userId })
+        .populate("items.menuItemId")
+        .populate("addressId")
+        ; // Fetch only user-specific orders
         return res.status(200).json({data: orders});
     } catch (error) {
         console.error("Error fetching user orders:", error);
@@ -87,7 +91,10 @@ export const getAllOrders = async (req, res) => {
 
         // Find orders for the restaurant
         const orderList = await Order.find({ restaurantId })
-        .populate("restaurantId").populate("userId").populate("items.menuItemId");
+        .populate("restaurantId")
+        .populate("userId")
+        .populate("items.menuItemId")
+        ;
 
         if (!orderList.length) {
             return res.status(404).json({ message: "No orders found for this restaurant" });
