@@ -1,18 +1,29 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
 
 export const ProtectedRoute = () => {
-    const { isUserAuth, userData } = useSelector((state) => state.user);
-    console.log("isuserAuth=====", isUserAuth);
-
-    // loading
-
-    
+    const { isUserAuth } = useSelector((state) => state.user);
     const navigate = useNavigate();
-    if (!isUserAuth) {
-        navigate("/login");
-        return;
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (isUserAuth === undefined) return; // Avoid navigating before checking auth state
+
+        if (!isUserAuth) {
+            navigate("/login");
+        } else {
+            setLoading(false);
+        }
+    }, [isUserAuth, navigate]);
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <p className="text-lg text-gray-600">Loading...</p>
+            </div>
+        );
     }
+
     return <Outlet />;
 };

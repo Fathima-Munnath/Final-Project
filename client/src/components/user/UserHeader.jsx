@@ -5,7 +5,7 @@ import { DarkMode } from "../shared/DarkMode";
 import { axiosInstance } from "../../config/AxiosInstance";
 import { useNavigate } from "react-router-dom";
 
-const UserHeader = () => {
+export const UserHeader = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false); // New state for mobile menu
   const navigate = useNavigate();
@@ -89,5 +89,3 @@ const UserHeader = () => {
     </header>
   );
 };
-
-export default UserHeader;
