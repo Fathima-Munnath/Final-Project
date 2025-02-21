@@ -9,11 +9,9 @@ export const MenuCards = ({ menuItem, refreshMenuItems }) => {
   // Handle menu update by navigating to update page
   const handleUpdate = async () => {
     try {
-      const response = await axiosInstance.put(`/updateMenu/${menuItem?._id}`);
-      toast.success(response.data.message || "Menu item updated successfully");
-      refreshMenuItems(); // Refresh menu list after deletion
+      navigate(`/restaurant/addMenu/${menuItem?._id}`);
     } catch (error) {
-      toast.error(error.response?.data?.message || "Error updating menu item");
+      toast.error("Error navigating to update menu");
     }
   };
 

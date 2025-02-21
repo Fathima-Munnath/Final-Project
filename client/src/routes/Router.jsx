@@ -117,7 +117,7 @@ export const router = createBrowserRouter([
             element: <RestaurantProfile />
           },
           {
-            path: "addMenu",
+            path: "addMenu/:menuItemId?",
             element: <AddMenu />,
           },
         ],

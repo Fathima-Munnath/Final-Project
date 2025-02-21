@@ -27,9 +27,6 @@ export const RestaurantOrders = () => {
     }
   };
 
-  if (loading) return <p className="text-gray-500 text-center">Loading...</p>;
-  if (error) return <p className="text-red-500 text-center">Error: {error}</p>;
-
   const pendingOrders = AllOrders?.filter(order => order.status === "Pending") || [];
   const dispatchedOrders = AllOrders?.filter(order => order.status === "Dispatched") || [];
   const cancelledOrders = AllOrders?.filter(order => order.status === "Cancelled") || [];
@@ -101,7 +98,7 @@ export const RestaurantOrders = () => {
         ))}
       </div>
 
-      {activeTab === "Pending" && (pendingOrders.length > 0 ? renderOrders(pendingOrders) : <p className="text-green-500 text-center text-sm">No Pending Orders.</p>)}
+      {activeTab === "Pending" && (pendingOrders.length > 0 ? renderOrders(pendingOrders) : <p className="text-green-500 text-center text-sm">No Orders Available.</p>)}
       {activeTab === "Dispatched" && (dispatchedOrders.length > 0 ? renderOrders(dispatchedOrders) : <p className="text-green-500 text-center text-sm">No Dispatched Orders.</p>)}
       {activeTab === "Cancelled" && (cancelledOrders.length > 0 ? renderOrders(cancelledOrders) : <p className="text-green-500 text-center text-sm">No Cancelled Orders.</p>)}
     </div>

@@ -3,10 +3,7 @@ import { useFetch } from "../../hooks/UseFetch";
 
 export const Orders = () => {
   const [orderList, loading, error] = useFetch("/order/get-orders");
-  console.log("data===",orderList)
-  if (loading) return <p className="text-gray-500 text-center">Loading...</p>;
-  if (error) return <p className="text-red-500 text-center">Error: {error}</p>;
-
+  
   return (
     <div className="container mx-auto p-4">
     {orderList?.length > 0 ? (
