@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { axiosInstance } from "../../config/AxiosInstance";
+import { axiosInstance } from "../../config/axiosInstance";
 import toast from "react-hot-toast";
 
 export const MenuCards = ({ menuItem, refreshMenuItems }) => {

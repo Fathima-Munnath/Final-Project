@@ -3,7 +3,7 @@ import Header from "../components/user/Header";
 import Footer from "../components/user/Footer";
 import { Outlet, useLocation } from "react-router-dom";
 import { RestaurantHeader } from "../components/restaurant/RestaurantHeader";
-import { axiosInstance } from "../config/AxiosInstance";
+import { axiosInstance } from "../config/axiosInstance";
 import { useSelector, useDispatch } from "react-redux";
 import { clearRestaurant, saveRestaurant } from "../redux/features/restaurantSlice";
 

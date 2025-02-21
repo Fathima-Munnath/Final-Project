@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { axiosInstance } from "../config/AxiosInstance";
+import { axiosInstance } from "../config/axiosInstance";
 
 export const useFetch = (url,refresh) => {
     const [data, setData] = useState();

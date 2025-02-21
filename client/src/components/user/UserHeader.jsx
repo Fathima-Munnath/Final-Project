@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ShoppingCart, User, Menu } from "lucide-react"; // Import Menu icon for mobile
 import { DarkMode } from "../shared/DarkMode";
-import { axiosInstance } from "../../config/AxiosInstance";
+import { axiosInstance } from "../../config/axiosInstance";
 import { useNavigate } from "react-router-dom";
 
 export const UserHeader = () => {
