@@ -11,19 +11,23 @@ export const RestaurantLayout = () => {
   const { isRestaurantAuth } = useSelector((state) => state.restaurant); // Ensure correct slice
   const dispatch = useDispatch();
   const location = useLocation();
-  const checkRestaurant = async () => {
-    try {
-      const response = await axiosInstance.get("/restaurant/check-restaurant");
-      dispatch(saveRestaurant(response.data)); // Ensure correct data is saved
-    } catch (error) {
-      dispatch(clearRestaurant());
-      console.error("Restaurant authentication failed:", error);
-    }
-  };
+   const checkRestaurant = async () => {
+        try {
+            const response = await axiosInstance({
+                method: "GET",
+                url: "/restaurant/check-restaurant",
+            });
+            dispatch(saveRestaurant())
+        } catch (error) {
+            dispatch(clearRestaurant())
+            console.log(error);
+        }
+    };
 
-  useEffect(() => {
-    checkRestaurant();
-  }, [location.pathname,]); // Added `dispatch` for stability
+
+    useEffect(() => {
+      checkRestaurant ();
+    }, [location.pathname]);
 
   return (
     <div className="flex flex-col min-h-screen bg-base-100">

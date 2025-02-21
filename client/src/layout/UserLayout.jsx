@@ -14,19 +14,21 @@ export const UserLayout = () => {
   const location = useLocation();
   const checkUser = async () => {
     try {
-      const response = await axiosInstance.get("/user/check-user");
-      dispatch(saveUser(response.data)); // Ensure proper user data is saved
+        const response = await axiosInstance({
+            method: "GET",
+            url: "/user/check-user",
+        });
+        dispatch(saveUser())
     } catch (error) {
-      dispatch(clearUser());
-      console.error("User authentication failed:", error);
+        dispatch(clearUser())
+        console.log(error);
     }
-  };
-  //console.log('pathname===', location.pathname)
+};
 
-  useEffect(() => {
+
+useEffect(() => {
     checkUser();
-  }, [location.pathname]);
-
+}, [location.pathname]);
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       {/* Header */}
