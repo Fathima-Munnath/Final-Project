@@ -112,12 +112,7 @@ export const userLogout = async (req, res, next) => {
 
 export const checkUser = async (req, res, next) => {
     try {
-        const userId = req.user.id;
-        return res.json({ message: "userId :"+ userId });
-        // if (!userid)
-        //     return res.json({ message: "user autherized" });
-        // else
-        //     return res.status(error.statusCode || 500).json({ message: error.message || "Internal server error" });
+        return res.json({ message: "user autherized" });
     } catch (error) {
         return res.status(error.statusCode || 500).json({ message: error.message || "Internal server error" });
     }
