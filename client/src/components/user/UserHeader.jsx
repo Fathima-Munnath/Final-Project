@@ -13,7 +13,6 @@ export const UserHeader = () => {
   const handleLogOut = async () => {
     try {
       await axiosInstance.get("/user/logout");
-      // navigate('/login');
       navigate("/");
     } catch (error) {
       console.log(error);

@@ -19,7 +19,7 @@ export const MenuCards = ({ menuItem, refreshMenuItems }) => {
   // Handle menu delete
   const handleDelete = async () => {
     try {
-      const response = await axiosInstance.delete(`/deleteMenu/${menuItem?._id}`);
+      const response = await axiosInstance.delete(`/menu/deleteMenu/${menuItem?._id}`);
       toast.success(response.data.message || "Menu item deleted successfully");
       refreshMenuItems(); // Refresh menu list after deletion
     } catch (error) {

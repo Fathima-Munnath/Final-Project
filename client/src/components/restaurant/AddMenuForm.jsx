@@ -27,7 +27,7 @@ export const AddMenuForm = ({ menuItem }) => {
 
     // Debugging: Check if menuItem is received
     useEffect(() => {
-        console.log("Received menuItem:", menuItem);
+        //console.log("Received menuItem:", menuItem);
     }, [menuItem]);
 
     useEffect(() => {
@@ -52,6 +52,7 @@ export const AddMenuForm = ({ menuItem }) => {
             formData.append("description", data.description);
             formData.append("price", data.price);
             formData.append("category", data.category);
+          
 
             if (data.image && data.image.length > 0) {
                 formData.append("image", data.image[0]);
