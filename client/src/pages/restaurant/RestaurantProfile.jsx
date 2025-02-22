@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { axiosInstance } from "../../config/AxiosInstance";
+import { axiosInstance } from "../../config/axiosInstance";
 import { useFetch } from "../../hooks/UseFetch";
 import toast from "react-hot-toast";
 
