@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { axiosInstance } from "../../config/AxiosInstance";
+import { axiosInstance } from "../../config/axiosInstance";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { clearUser, saveUser } from "../../redux/features/userSlice";
@@ -12,7 +12,7 @@ export const Login = ({ role }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    console.log("role is :"+ role );
+
     const user = role === "restaurant"
         ? {
             role: "restaurant",

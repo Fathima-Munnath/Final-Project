@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { axiosInstance } from "../../config/axiosInstance.";
+import { axiosInstance } from "../../config/axiosInstance";
 import toast from "react-hot-toast";
 import { CameraIcon } from "lucide-react";
 

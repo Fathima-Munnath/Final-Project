@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 
 export const MenuCards = ({ menuItem, refreshMenuItems }) => {
   const navigate = useNavigate();
+  console.log("menuid===", menuItem)
 
   // Handle menu update by navigating to update page
   const handleUpdate = async () => {
