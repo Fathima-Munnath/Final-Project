@@ -53,7 +53,8 @@ export const getAddress = async (req, res) => {
 
 export const updateAddress = async (req,res)=> {
     try {
-            const {  houseName,city, state,postalCode, mobile,landmark, addressId } = req.body;
+            const {addressId }= req.params;
+            const {  houseName,city, state,postalCode, mobile,landmark} = req.body;
             const address = await Address.findById(addressId);
             if (!address) {
                 return res.status(404).json({ message: "Address not found" });
@@ -72,3 +73,24 @@ export const updateAddress = async (req,res)=> {
         }
 
 };
+
+export const removeAddress = async (req,res)=>{
+    try {
+            const { addressId } = req.params;
+    
+           
+            // Check if the menu item exists
+            const address = await Address.findById(addressId);
+            if (!address) {
+                return res.status(404).json({ message: "Address item not found" });
+            }
+    
+            // Delete the menu item
+            await address .deleteOne();
+    
+            return res.status(200).json({ message: "Address item deleted successfully" });
+    
+        } catch (error) {
+            return res.status(500).json({ message: error.message || "Internal server error" });
+        }
+}

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useFetch } from "../../hooks/UseFetch";
+import { axiosInstance } from "../../config/axiosInstance";
 
 export const RestaurantOrders = () => {
   const [AllOrders, loading, error, setData] = useFetch("/order/get-all-orders");
@@ -7,26 +8,24 @@ export const RestaurantOrders = () => {
 
   const handleDispatch = async (orderId) => {
     try {
-      const response = await fetch(`/order/update-status/${orderId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ status: "Dispatched" }),
+      //console.log("Dispatching Order ID:", orderId); // Debugging log
+  
+      const response = await axiosInstance.patch(`/order/update-status/${orderId}`, {
+        status: "Dispatched",
       });
-
-      if (!response.ok) throw new Error("Failed to update order status");
-
+  
+      console.log("API Response===", response.data); // Debugging log
+  
+      // Update the local state if the request is successful
       setData((prevOrders) =>
         prevOrders.map((order) =>
           order._id === orderId ? { ...order, status: "Dispatched" } : order
         )
       );
     } catch (error) {
-      console.error("Error dispatching order:", error);
+      console.error("Error dispatching order:", error.response?.data || error.message);
     }
   };
-
   const pendingOrders = AllOrders?.filter(order => order.status === "Pending") || [];
   const dispatchedOrders = AllOrders?.filter(order => order.status === "Dispatched") || [];
   const cancelledOrders = AllOrders?.filter(order => order.status === "Cancelled") || [];
@@ -45,7 +44,18 @@ export const RestaurantOrders = () => {
           <h3 className="mt-1 text-sm font-semibold text-green-800">Restaurant: {order.restaurantId.name}</h3>
           <div className="mt-1 p-2 bg-green-100 rounded-md border border-green-300 w-full md:w-2/3">
             <p className="text-xs text-gray-500">Customer: <span className="font-semibold text-green-800">{order.userId.name}</span> ({order.userId.email})</p>
-            <p className="text-xs text-gray-600 mt-1">Address: <span className="font-medium text-green-700">{order.address ? order.address : "No address provided"}</span></p>
+            {order.addressId ? (
+                  <p className="text-xs text-green-700 font-medium">
+                    {order.addressId.houseName}, {order.addressId.city}, {order.addressId.postalCode}, {order.addressId.state}
+                  </p>
+                ) : (
+                  <p className="text-xs text-gray-500">No address provided</p>
+                )}
+                {order.addressId && (
+                  <p className="text-xs text-green-700 font-medium">
+                    Landmark: {order.addressId.landmark} | Contact:  {order.addressId.mobile}
+                  </p>
+                )}
           </div>
         </div>
         <div className="w-full md:w-1/4 mt-3 md:mt-0 flex flex-col items-center">

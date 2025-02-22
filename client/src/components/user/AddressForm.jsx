@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { axiosInstance } from "../../config/AxiosInstance";
+import { axiosInstance } from "../../config/axiosInstance";
 import { useFetch } from "../../hooks/UseFetch";
 import toast from "react-hot-toast";
 
@@ -29,7 +29,7 @@ const AddressForm = () => {
     if (addr) {
       setAddress(addr);
       setIsEditing(true);
-      setEditId(addr.id);
+      setEditId(addr._id); // Ensure `_id` is stored for updates
     } else {
       setAddress({ houseName: "", city: "", state: "", postalCode: "", mobile: "", landmark: "" });
       setIsEditing(false);
@@ -50,23 +50,27 @@ const AddressForm = () => {
     e.preventDefault();
     try {
       if (isEditing) {
-        await axiosInstance.put(`/address/update-address/${editId}`, address);
+        await axiosInstance.put(`/address/update-address/${edit._Id}`, address);
+        setAddressList((prev) =>
+          prev.map((item) => (item._id === editId ? { ...item, ...address } : item))
+        );
+        toast.success("Address updated successfully!");
       } else {
-        await axiosInstance.post("/address/add-address", address);
+        const { data } = await axiosInstance.post("/address/add-address", address);
+        setAddressList((prev) => [...prev, data]);
+        toast.success("Address added successfully!");
       }
-      toast.success(isEditing ? "Address updated successfully!" : "Address added successfully!");
       setIsModalOpen(false);
-      window.location.reload();
     } catch (error) {
       toast.error("Failed to save address.");
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (_id) => {
     try {
-      await axiosInstance.delete(`/address/delete-address/${id}`);
+      await axiosInstance.delete(`/address/delete-address/${_id}`);
+      setAddressList((prev) => prev.filter((item) => item._id !== _id));
       toast.success("Address deleted successfully!");
-      setAddressList(addressList.filter((item) => item.id !== id));
     } catch (error) {
       toast.error("Failed to delete address.");
     }
@@ -78,23 +82,24 @@ const AddressForm = () => {
         <button onClick={() => openModal()} className="bg-green-600 text-white p-2 rounded-md text-sm font-semibold mb-4 transition hover:bg-green-700">
           Add New Address
         </button>
-        
+
         <div className="space-y-4">
           {addressList.map((addr) => (
-            <div key={addr.id} className="bg-white rounded-lg shadow-md p-4 border border-green-300 flex flex-col md:flex-row items-start md:items-center text-sm">
+            <div key={addr._id} className="bg-white rounded-lg shadow-md p-4 border border-green-300 flex flex-col md:flex-row items-start md:items-center text-sm">
               <div className="flex-1">
                 <h2 className="text-md font-bold text-green-800">{addr.houseName}, {addr.city}, {addr.state}</h2>
                 <p className="text-xs text-gray-500">Postal: {addr.postalCode} | Mobile: {addr.mobile}</p>
                 <p className="text-xs text-gray-500">{addr.landmark && `Landmark: ${addr.landmark}`}</p>
               </div>
               <div className="flex space-x-2 mt-3 md:mt-0">
-                <button onClick={() => openModal(addr)} className="bg-yellow-500 text-white p-1 rounded-md text-xs transition hover:bg-yellow-600">Edit</button>
-                <button onClick={() => handleDelete(addr.id)} className="bg-red-600 text-white p-1 rounded-md text-xs transition hover:bg-red-700">Delete</button>
+                
+                <button onClick={() => handleDelete(addr._id)} className="bg-red-600 text-white p-1 rounded-md text-xs transition hover:bg-red-700">Delete</button>
               </div>
             </div>
           ))}
         </div>
       </div>
+
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg shadow-xl w-96 border border-green-300">

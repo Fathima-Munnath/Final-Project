@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useFetch } from "../../hooks/UseFetch";
 import toast from "react-hot-toast";
-import { axiosInstance } from "../../config/AxiosInstance";
+import { axiosInstance } from "../../config/axiosInstance";
 import AddressForm from "../../components/user/AddressForm";
 import { Orders } from "../../components/user/Orders";
 
