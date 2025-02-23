@@ -94,6 +94,7 @@ export const getAllOrders = async (req, res) => {
         .populate("restaurantId")
         .populate("userId")
         .populate("items.menuItemId")
+        .populate("addressId")
         ;
 
         if (!orderList.length) {
