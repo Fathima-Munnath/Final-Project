@@ -79,7 +79,7 @@ export const CartCards = ({ items, handleRemove, handleQuantityChange }) => {
         <h3 className="text-gray-600">₹{items?.menuItemId?.price}</h3>
       </div>
       {/* Quantity Controls */}
-      <div className="flex items-center border rounded-md bg-white px-2">
+      {/* <div className="flex items-center border rounded-md bg-white px-2">
         <button
           className="px-3 py-1 text-lg font-bold text-gray-600 hover:text-red-500"
           onClick={() => handleQuantityChange(items?.menuItemId?._id, items.quantity - 1)}
@@ -94,7 +94,7 @@ export const CartCards = ({ items, handleRemove, handleQuantityChange }) => {
         >
           +
         </button>
-      </div>
+      </div> */}
       {/* Remove Button */}
       <button
         className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-200"

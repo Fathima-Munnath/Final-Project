@@ -10,9 +10,8 @@ const app = express();
 app.use(express.json())
 app.use(cors({
     origin:["http://localhost:5173","https://food-website-fawn-six.vercel.app"],
-    methods:["GET","PUT","POST", "DELETE","OPTIONS"],
+    methods:["GET","PUT","POST", "DELETE","OPTIONS","PATCH"],
     credentials:true,
-
 }))
 app.use(cookieParser())
 const port = 3000;

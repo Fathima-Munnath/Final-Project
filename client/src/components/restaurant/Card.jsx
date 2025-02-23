@@ -3,25 +3,25 @@ import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../../config/axiosInstance";
 import toast from "react-hot-toast";
 
-export const MenuCards = ({ menuItem, refreshMenuItems }) => {
+export const MenuCards = ({ menuItem,}) => {
   const navigate = useNavigate();
   console.log("menuid===", menuItem)
 
   // Handle menu update by navigating to update page
-  const handleUpdate = async () => {
-    try {
-      navigate(`/restaurant/addMenu/${menuItem?._id}`);
-    } catch (error) {
-      toast.error("Error navigating to update menu");
-    }
-  };
+  // const handleUpdate = async () => {
+  //   try {
+  //     navigate(`/restaurant/addMenu/${menuItem?._id}`);
+  //   } catch (error) {
+  //     toast.error("Error navigating to update menu");
+  //   }
+  // };
 
   // Handle menu delete
   const handleDelete = async () => {
     try {
       const response = await axiosInstance.delete(`/menu/deleteMenu/${menuItem?._id}`);
       toast.success(response.data.message || "Menu item deleted successfully");
-      refreshMenuItems(); // Refresh menu list after deletion
+      setRefreshState((prev) => !prev); // Refresh menu list after deletion
     } catch (error) {
       toast.error(error.response?.data?.message || "Error deleting menu item");
     }
@@ -46,13 +46,6 @@ export const MenuCards = ({ menuItem, refreshMenuItems }) => {
           <p className="text-xs text-gray-500">{menuItem?.category} | {menuItem?.restaurantId?.name}</p>
         </div>
         <div className="card-actions flex justify-between mt-3">
-          <button
-            type="button"
-            className="px-3 py-1 text-xs font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
-            onClick={handleUpdate}
-          >
-            Update
-          </button>
           <button
             type="button"
             className="px-3 py-1 text-xs font-medium text-white bg-red-600 rounded-lg hover:bg-red-700"

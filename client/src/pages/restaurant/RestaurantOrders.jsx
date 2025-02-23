@@ -1,29 +1,43 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useFetch } from "../../hooks/UseFetch";
 import { axiosInstance } from "../../config/axiosInstance";
 
 export const RestaurantOrders = () => {
   const [AllOrders, loading, error, setData] = useFetch("/order/get-all-orders");
   const [activeTab, setActiveTab] = useState("Pending");
-
+  const [orders, setOrders] = useState([]);
+  useEffect(() => {
+    setOrders(AllOrders); // Sync local state with fetched data
+  }, [AllOrders]);
+   
+  
   const handleDispatch = async (orderId) => {
     try {
-      //console.log("Dispatching Order ID:", orderId); // Debugging log
-  
       const response = await axiosInstance.patch(`/order/update-status/${orderId}`, {
         status: "Dispatched",
       });
-  
-      console.log("API Response===", response.data); // Debugging log
-  
-      // Update the local state if the request is successful
-      setData((prevOrders) =>
+      setOrders((prevOrders) =>
         prevOrders.map((order) =>
           order._id === orderId ? { ...order, status: "Dispatched" } : order
         )
       );
     } catch (error) {
       console.error("Error dispatching order:", error.response?.data || error.message);
+    }
+  };
+  const handleCancel = async (orderId) => {
+    try {
+      const response = await axiosInstance.patch(`/order/update-status/${orderId}`, {
+        status: "Cancelled",
+      });
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order._id === orderId ? { ...order, status: "Cancelled" } : order
+        )
+      );
+    
+    } catch (error) {
+      console.error("Error cancelling order:", error.response?.data || error.message);
     }
   };
   const pendingOrders = AllOrders?.filter(order => order.status === "Pending") || [];
@@ -38,7 +52,15 @@ export const RestaurantOrders = () => {
       >
         <div className="flex-1">
           <h2 className="text-md font-bold text-green-800">Order ID: {order._id}</h2>
-          <p className="text-xs text-gray-500">Status: <span className={`font-semibold ${order.status === "Dispatched" ? "text-blue-600" : "text-green-600"}`}>{order.status}</span></p>
+          <p className="text-xs text-gray-500">
+            Status:
+            <span className={`font-semibold ${order.status === "Pending" ? "text-yellow-500" :
+                order.status === "Dispatched" ? "text-green-600" :
+                  order.status === "Cancelled" ? "text-red-600" : "text-gray-500"
+              }`}>
+              {order.status}
+            </span>
+          </p>
           <p className="text-sm font-semibold text-green-700">Total: ₹{(order.totalAmount / 100).toFixed(2)}</p>
           <p className="text-xs text-gray-500">Date: {new Date(order.orderDate).toLocaleString()}</p>
           <h3 className="mt-1 text-sm font-semibold text-green-800">Restaurant: {order.restaurantId.name}</h3>
@@ -82,7 +104,7 @@ export const RestaurantOrders = () => {
                 Dispatch
               </button>
               <button
-                onClick={() => handleDispatch(order._id)}
+                onClick={() => handleCancel(order._id)}
                 className="mt-2 ml-2 px-4 py-2 text-xs font-bold rounded-md text-white bg-red-600 hover:bg-red-700"
               >
                 Cancel Order

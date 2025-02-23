@@ -128,7 +128,9 @@ export const getAllOrders = async (req, res) => {
 export const updateOrder  = async (req,res)=>{
     try {
         const { orderId } = req.params;
+       
         const { status } = req.body;
+         
     
         if (!status) {
           return res.status(400).json({ error: "Status is required" });

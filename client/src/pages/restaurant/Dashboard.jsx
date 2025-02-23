@@ -1,11 +1,12 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { useFetch } from "../../hooks/UseFetch";
 import { MenuCards } from "../../components/restaurant/Card";
 import { MenuSkelton } from "../../components/shared/Skeltons";
 
 
 export const Dashboard = () => {
-  const [meuItems,isLoading,error]=useFetch("/menu/get-restaurant-menu-items")
+   const [refreshState, setRefreshState] = useState(false);
+  const [meuItems,isLoading,error]=useFetch("/menu/get-restaurant-menu-items",refreshState)
   //console.log("restaurant menu===",meuItems);
   return (
     <div>

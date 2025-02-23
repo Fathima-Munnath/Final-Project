@@ -81,7 +81,7 @@ export const Cart = () => {
                             <div className="text-gray-700 text-xs">
                                 <p className="font-semibold">{getAddress[0]?.user?._id}</p>
                                 <p>{getAddress[0]?.houseName},{getAddress[0]?.city}, {getAddress[0]?.state}, PIN: {getAddress[0]?.postalCode}</p>
-                                <p>land Mark:{getAddress[0]?.landmark} | Contact: {getAddress[0]?.mobile}</p>
+                                <p>Land Mark: {getAddress[0]?.landmark} | Contact: {getAddress[0]?.mobile}</p>
                             </div>
                         ) : (
                             <p className="text-gray-500 text-xs">No address found. Please add an address.</p>
