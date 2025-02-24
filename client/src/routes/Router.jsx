@@ -17,7 +17,7 @@ import  {Dashboard}  from "../pages/restaurant/Dashboard";
 import {RestaurantOrders} from "../pages/restaurant/RestaurantOrders";
 import {RestaurantProfile}  from "../pages/restaurant/RestaurantProfile";
 import {Cart} from "../pages/user/Cart";
-import {Orders}  from "../pages/user/Orders";
+import { PaymentSuccess} from "../pages/user/PaymentSuccess";
 
 
 const data = {};
@@ -75,12 +75,8 @@ export const router = createBrowserRouter([
             element: <Cart />,
           },
           {
-            path: "orders",
-            element: <Orders />
-          },
-          {
             path: "payment/success",
-            element: <h2>Payment success</h2>,
+            element: <PaymentSuccess />,
           },
         ],
       },
