@@ -16,8 +16,10 @@ const AddressForm = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editId, setEditId] = useState(null);
+  const [refreshState, setRefreshState] = useState(false);
 
-  const [addressData] = useFetch("/address/get-address");
+
+  const [addressData] = useFetch("/address/get-address", refreshState);
 
   useEffect(() => {
     if (addressData) {
@@ -59,6 +61,7 @@ const AddressForm = () => {
         const { data } = await axiosInstance.post("/address/add-address", address);
         setAddressList((prev) => [...prev, data]);
         toast.success("Address added successfully!");
+        setRefreshState((prev) => !prev);
       }
       setIsModalOpen(false);
     } catch (error) {
@@ -71,6 +74,7 @@ const AddressForm = () => {
       await axiosInstance.delete(`/address/delete-address/${_id}`);
       setAddressList((prev) => prev.filter((item) => item._id !== _id));
       toast.success("Address deleted successfully!");
+      setRefreshState((prev) => !prev);
     } catch (error) {
       toast.error("Failed to delete address.");
     }

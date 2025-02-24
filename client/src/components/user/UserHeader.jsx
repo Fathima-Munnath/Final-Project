@@ -40,9 +40,7 @@ export const UserHeader = () => {
           <Link to="/" className="hover:underline">Home</Link>
           <Link to="/about" className="hover:underline">About</Link>
           <Link to="/menu" className="hover:underline">Menu</Link>
-          <Link to="/signup" className="bg-white text-red-500 px-4 py-1 rounded-full hover:bg-gray-200 transition">
-            Join Us
-          </Link>
+          
         </nav>
 
         {/* Right Icons */}
@@ -50,9 +48,9 @@ export const UserHeader = () => {
           {/* Cart Icon */}
           <Link to="/user/cart" className="relative">
             <ShoppingCart className="w-7 h-7" />
-            <span className="absolute -top-2 -right-2 bg-white text-red-500 text-xs px-2 py-0.5 rounded-full font-bold shadow-md">
+            {/* <span className="absolute -top-2 -right-2 bg-white text-red-500 text-xs px-2 py-0.5 rounded-full font-bold shadow-md">
               3
-            </span>
+            </span> */}
           </Link>
 
           {/* Profile Dropdown */}
@@ -80,9 +78,7 @@ export const UserHeader = () => {
           <Link to="/" className="hover:underline" onClick={() => setMobileNavOpen(false)}>Home</Link>
           <Link to="/about" className="hover:underline" onClick={() => setMobileNavOpen(false)}>About</Link>
           <Link to="/menu" className="hover:underline" onClick={() => setMobileNavOpen(false)}>Menu</Link>
-          <Link to="/signup" className="bg-white text-red-500 px-4 py-1 rounded-full hover:bg-gray-200 transition" onClick={() => setMobileNavOpen(false)}>
-            Join Us
-          </Link>
+         
         </nav>
       )}
     </header>

@@ -18,7 +18,7 @@ export const Signup = ({ role = "user" }) => {
       }
       else {
         response = await axiosInstance.post("/user/signup", data);
-        navigate("/user/dashboard");
+        navigate("/user/profile");
       }
       console.log("Signup Success:", response);
     } catch (error) {
@@ -97,7 +97,7 @@ export const Signup = ({ role = "user" }) => {
           </div>
 
           {/* Signup Button */}
-          <button className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition">
+          <button className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition"  onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
             Sign Up
           </button>
 

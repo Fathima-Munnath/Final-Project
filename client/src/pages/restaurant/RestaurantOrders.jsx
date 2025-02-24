@@ -3,9 +3,11 @@ import { useFetch } from "../../hooks/UseFetch";
 import { axiosInstance } from "../../config/axiosInstance";
 
 export const RestaurantOrders = () => {
-  const [AllOrders, loading, error, setData] = useFetch("/order/get-all-orders");
+  const [refreshState, setRefreshState] = useState(false);
+  const [AllOrders, loading, error, setData] = useFetch("/order/get-all-orders",refreshState);
   const [activeTab, setActiveTab] = useState("Pending");
   const [orders, setOrders] = useState([]);
+
   useEffect(() => {
     setOrders(AllOrders); // Sync local state with fetched data
   }, [AllOrders]);
@@ -21,6 +23,7 @@ export const RestaurantOrders = () => {
           order._id === orderId ? { ...order, status: "Dispatched" } : order
         )
       );
+      setRefreshState((prev) => !prev);
     } catch (error) {
       console.error("Error dispatching order:", error.response?.data || error.message);
     }
@@ -35,6 +38,7 @@ export const RestaurantOrders = () => {
           order._id === orderId ? { ...order, status: "Cancelled" } : order
         )
       );
+      setRefreshState((prev) => !prev);
     
     } catch (error) {
       console.error("Error cancelling order:", error.response?.data || error.message);
