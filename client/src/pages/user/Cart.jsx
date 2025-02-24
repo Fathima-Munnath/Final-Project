@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useFetch } from "../../hooks/UseFetch";
 import { CartCards } from "../../components/user/cards";
 import toast from "react-hot-toast";
@@ -6,10 +7,21 @@ import { axiosInstance } from "../../config/axiosInstance";
 import { loadStripe } from "@stripe/stripe-js";
 
 export const Cart = () => {
+    const navigate = useNavigate();
     const [refreshState, setRefreshState] = useState(false);
     const [cartDetails, isLoading, error] = useFetch("/cart/get-cart", refreshState);
-    const [getAddress] = useFetch("/address/get-address");
-    console.log("address===", getAddress);
+    const [addressList] = useFetch("/address/get-address");
+    const [selectedAddress, setSelectedAddress] = useState(null);
+
+    useEffect(() => {
+        if (addressList?.length > 0) {
+            setSelectedAddress(addressList[0]._id); // Default to first address
+        }
+    }, [addressList]);
+
+    const handleAddressSelect = (addressId) => {
+        setSelectedAddress(addressId);
+    };
 
     const makePayment = async () => {
         try {
@@ -18,17 +30,15 @@ export const Cart = () => {
                 return;
             }
 
-            if (!getAddress?.[0]?._id) {
-                toast.error("Please select an address before proceeding.");
+            if (!selectedAddress) {
+                toast.error("Please select a delivery address!");
                 return;
             }
-
-            const addressId = getAddress?.[0]?._id;
 
             const stripe = await loadStripe(import.meta.env.VITE_STRIPE_Publishable_key);
             const session = await axiosInstance.post("/payment/create-checkout-session", {
                 products: cartDetails?.items,
-                addressId,
+                addressId: selectedAddress,
             });
 
             if (!session?.data?.sessionId) {
@@ -44,14 +54,11 @@ export const Cart = () => {
 
     const handleRemoveCartItem = async (menuItemId) => {
         try {
-            console.log(menuItemId);
-            const response = await axiosInstance.delete(`/cart/deleteCart/${menuItemId}`);
-
-            toast.success("Menu item removed ");
+            await axiosInstance.delete(`/cart/deleteCart/${menuItemId}`);
+            toast.success("Menu item removed");
             setRefreshState((prev) => !prev);
         } catch (error) {
-            console.log(error);
-            toast.error(error?.response?.data?.message || "failed to remove");
+            toast.error(error?.response?.data?.message || "Failed to remove");
         }
     };
 
@@ -72,23 +79,39 @@ export const Cart = () => {
                     )}
                 </div>
 
-                {/* Summary & Payment Section */}
+                {/* Address & Payment Section */}
                 <div className="bg-green-100 p-6 rounded-lg shadow-md">
-                    {/* Address Section */}
-                    <div className="mb-4 text-sm ">
-                        <h2 className="text-green-700 font-semibold border-b pb-2 mb-2 text-xs">Delivery Address</h2>
-                        {getAddress?.length > 0 ? (
-                            <div className="text-gray-700 text-xs">
-                                <p className="font-semibold">{getAddress[0]?.user?._id}</p>
-                                <p>{getAddress[0]?.houseName},{getAddress[0]?.city}, {getAddress[0]?.state}, PIN: {getAddress[0]?.postalCode}</p>
-                                <p>Land Mark: {getAddress[0]?.landmark} | Contact: {getAddress[0]?.mobile}</p>
-                            </div>
-                        ) : (
-                            <p className="text-gray-500 text-xs">No address found. Please add an address.</p>
-                        )}
-                    </div>
+                    <h2 className="text-green-700 font-semibold border-b pb-2 mb-2">Select Delivery Address</h2>
 
-                    <h2 className="text-xl font-semibold border-b pb-4 mb-4">Order Summary</h2>
+                    {addressList?.length > 0 ? (
+                        <div className="space-y-3">
+                            {addressList.map((addr) => (
+                                <div 
+                                    key={addr._id}
+                                    className={`p-3 border rounded-md cursor-pointer ${
+                                        selectedAddress === addr._id ? "border-green-500 bg-green-200" : "border-gray-300"
+                                    }`}
+                                    onClick={() => handleAddressSelect(addr._id)}
+                                >
+                                    <h3 className="font-semibold">{addr.houseName}</h3>
+                                    <p className="text-sm">{addr.city}, {addr.state}, {addr.postalCode}</p>
+                                    <p className="text-sm">Landmark: {addr.landmark} | Mobile: {addr.mobile}</p>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="text-gray-500 text-xs text-center">
+                            <p>No address found. Go to Profile to add an address.</p>
+                            <button 
+                                className="mt-2 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
+                                onClick={() => navigate("/user/profile")}
+                            >
+                                Go to Profile
+                            </button>
+                        </div>
+                    )}
+
+                    <h2 className="text-xl font-semibold border-b pb-4 mb-4 mt-4">Order Summary</h2>
                     {cartDetails?.items?.map((value) => (
                         <p key={value._id} className="text-gray-700 flex justify-between">
                             {value.menuItemId?.name} <span className="font-semibold">₹{value?.menuItemId?.price}</span>

@@ -12,7 +12,17 @@ export const Orders = () => {
           <div key={order._id} className="bg-white rounded-lg shadow-md p-4 border border-green-300 flex flex-col md:flex-row items-start md:items-center text-sm">
             <div className="flex-1">
               <h2 className="text-md font-bold text-green-800">Order ID: {order._id}</h2>
-              <p className="text-xs text-gray-500">Status: <span className="font-semibold text-green-600">{order.status}</span></p>
+              <p className="text-xs text-gray-500">
+            Status:
+            <span className={`font-semibold ${order.status === "Pending" ? "text-yellow-500" :
+                order.status === "Dispatched" ? "text-green-600" :
+                  order.status === "Cancelled" ? "text-red-600" : "text-gray-500"
+              }`}>
+              {order.status}
+            </span>
+          </p>
+              
+              
               <p className="text-sm font-semibold text-green-700">Total: ₹{(order.totalAmount / 100).toFixed(2)}</p>
               <p className="text-xs text-gray-500">Date: {new Date(order.orderDate).toLocaleString()}</p>
               <div className="mt-1 p-2 bg-green-100 rounded-md border border-green-300 w-full md:w-2/3">
