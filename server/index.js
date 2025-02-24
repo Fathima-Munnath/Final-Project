@@ -9,7 +9,7 @@ import { apiRouter } from "./routes/index.js";
 const app = express();
 app.use(express.json())
 app.use(cors({
-    origin:["http://localhost:5173","https://final-project-eta-blush.vercel.app"],
+    origin:["http://localhost:5173","https://food-website-fawn-six.vercel.app"],
     methods:["GET","PUT","POST", "DELETE","OPTIONS","PATCH"],
     credentials:true,
 }))
@@ -17,7 +17,6 @@ app.use(cookieParser())
 const port = 3000;
 
 connectDB();
-
 app.get("/", (req, res) => {
     res.send("Hello World!");
 });
