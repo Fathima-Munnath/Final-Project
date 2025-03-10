@@ -3,29 +3,31 @@ import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../../config/axiosInstance";
 import toast from "react-hot-toast";
 
-export const MenuCards = ({ menuItem,}) => {
+export const MenuCards = ({ menuItem}) => {
   const navigate = useNavigate();
   console.log("menuid===", menuItem)
 
-  // Handle menu update by navigating to update page
-  // const handleUpdate = async () => {
-  //   try {
-  //     navigate(`/restaurant/addMenu/${menuItem?._id}`);
-  //   } catch (error) {
-  //     toast.error("Error navigating to update menu");
-  //   }
-  // };
+  
 
   // Handle menu delete
   const handleDelete = async () => {
     try {
       const response = await axiosInstance.delete(`/menu/deleteMenu/${menuItem?._id}`);
       toast.success(response.data.message || "Menu item deleted successfully");
-      setRefreshState((prev) => !prev); // Refresh menu list after deletion
+    
     } catch (error) {
       toast.error(error.response?.data?.message || "Error deleting menu item");
     }
   };
+  const handleToggleAvailability = async () => {
+    try {
+        const response = await axiosInstance.patch(`/menu/toggleAvailability/${menuItem?._id}`);
+        toast.success(response.data.message);
+
+    } catch (error) {
+        toast.error(error.response?.data?.message || "Error updating menu availability");
+    }
+};
 
   return (
     <div className="card bg-white shadow-lg rounded-lg overflow-hidden transition-transform duration-300 hover:scale-105 w-full max-w-xs">
@@ -44,12 +46,23 @@ export const MenuCards = ({ menuItem,}) => {
         <div className="flex justify-between items-center">
           <p className="text-md font-bold text-green-600">₹{menuItem?.price}</p>
           <p className="text-xs text-gray-500">{menuItem?.category} | {menuItem?.restaurantId?.name}</p>
+          <p className={`text-sm font-bold ${menuItem.availability ? "text-green-600" : "text-red-600"}`}>
+    {menuItem.availability ? "Available" : "Unavailable"}
+</p>
+
         </div>
         <div className="card-actions flex justify-between mt-3">
           <button
             type="button"
+            className="px-3 py-1 text-xs font-medium text-white bg-blue-600 rounded-lg hover:bg-red-700"
+            onClick={handleToggleAvailability}
+          >
+        Update
+          </button>
+          <button
+            type="button"
             className="px-3 py-1 text-xs font-medium text-white bg-red-600 rounded-lg hover:bg-red-700"
-            onClick={handleDelete}
+            onClick={ handleDelete }
           >
             Delete
           </button>

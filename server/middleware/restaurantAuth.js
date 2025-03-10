@@ -17,7 +17,6 @@ export const restaurantAuth = (req, res, next) => {
             req.restaurant = tokenVerified;
         else
             return res.status(401).json({ message: "restaurant autherization failed", success: false });
-        //req.user = { id: tokenVerified.id };
 
         next();
     } catch (error) {

@@ -16,7 +16,8 @@ export const Dashboard = () => {
             <div className="min-h-screen bg-base-100 flex flex-col items-center py-10 px-4">
               <section className="w-full max-w-7xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 justify-items-center">
                 {meuItems?.map((menuItem, index) => (
-                  <MenuCards key={menuItem?._id} menuItem={menuItem} />
+                  <MenuCards key={menuItem?._id} menuItem={menuItem} setRefreshState={setRefreshState} />
+                  
                 ))}
               </section>
             </div>

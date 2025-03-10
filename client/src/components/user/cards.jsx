@@ -48,6 +48,10 @@ export const MenuCards = ({ menuItem }) => {
         </p>
         {/* Category & Location */}
         <p className="text-xs text-gray-500">{menuItem?.category} | {menuItem?.restaurantId?.name}</p>
+        <p className={`text-sm font-bold ${menuItem.availability ? "text-green-600" : "text-red-600"}`}>
+        {menuItem.availability ? "Available" : "Unavailable"}
+        </p>
+
         <div className="card-actions">
           <button
             type="button"

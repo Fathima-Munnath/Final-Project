@@ -40,9 +40,7 @@ export const UserHeader = () => {
           <Link to="/" className="hover:underline">Home</Link>
           <Link to="/about" className="hover:underline">About</Link>
           <Link to="/menu" className="hover:underline">Menu</Link>
-          
         </nav>
-
         {/* Right Icons */}
         <div className="flex items-center space-x-6">
           {/* Cart Icon */}
