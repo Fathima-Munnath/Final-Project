@@ -53,13 +53,14 @@ router.post("/create-checkout-session", userAuth, async (req, res, next) => {
         const newOrder = new Order({ 
             userId, 
             sessionId: session?.id, 
-            totalAmount: totalAmount,
             restaurantId: restaurantId,
+            totalAmount : totalAmount,
             addressId,
             items: products.map(product => ({
                 menuItemId: product?.menuItemId?._id,  // Store the actual menu item ID
-                quantity: product?.quantity || 1,  // Ensure quantity is included
+                quantity: product?.quantity ,  // Ensure quantity is included
                 price: product?.menuItemId?.price || 0, // Store the price per unit
+             
             })),
         });
 

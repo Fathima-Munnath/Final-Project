@@ -65,6 +65,21 @@ export const Cart = () => {
             toast.error(error?.response?.data?.message || "Failed to remove");
         }
     };
+    const handleQuantityChange = async (menuItemId, newQuantity) => {
+        if (newQuantity < 1) return;
+    
+        try {
+            await axiosInstance.put("/cart/updateCart", {
+                menuItemId,
+                quantity: newQuantity,
+            });
+            toast.success("Quantity updated");
+            setRefreshState((prev) => !prev);
+        } catch (error) {
+            toast.error(error?.response?.data?.message || "Failed to update quantity");
+        }
+    };
+    
 
     return (
         <div className="container mx-auto p-6">
@@ -76,7 +91,7 @@ export const Cart = () => {
                     <h2 className="text-2xl font-semibold border-b pb-4 mb-4">Items in Cart</h2>
                     {cartDetails?.items?.length > 0 ? (
                         cartDetails.items.map((value) => (
-                            <CartCards items={value} key={value?._id} handleRemove={handleRemoveCartItem} />
+                            <CartCards items={value} key={value?._id} handleRemove={handleRemoveCartItem} handleQuantityChange={handleQuantityChange} />
                         ))
                     ) : (
                         <p className="text-gray-500 text-center">Your cart is empty.</p>
@@ -118,7 +133,7 @@ export const Cart = () => {
                     <h2 className="text-xl font-semibold border-b pb-4 mb-4 mt-4">Order Summary</h2>
                     {cartDetails?.items?.map((value) => (
                         <p key={value._id} className="text-gray-700 flex justify-between">
-                            {value.menuItemId?.name} <span className="font-semibold">₹{value?.menuItemId?.price}</span>
+                            {value.menuItemId?.name} <span className="font-semibold">₹{value?.menuItemId?.price} </span>
                         </p>
                     ))}
                     <div className="border-t mt-4 pt-4 text-lg font-bold">

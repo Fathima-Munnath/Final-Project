@@ -25,7 +25,7 @@ export const PaymentSuccess = () => {
                 <h1 className="text-2xl font-bold text-green-600">Payment Successful!</h1>
                 <p className="text-gray-700 mt-2">Thank you for your purchase.</p>
                 <button 
-                    className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg"
+                    className="mt-4 bg-green-600 text-white px-4 py-2 rounded-lg"
                     onClick={() => navigate("/")}
                 >
                     Go to Home
