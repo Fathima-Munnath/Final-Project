@@ -65,7 +65,7 @@ import mongoose from "mongoose";
 export const updateMenuItem = async (req, res, next) => {
     try {
         const { menuId } = req.params;
-        const { name, description, price, category, image, availability, offers } = req.body;
+        const { name, description, price, category, availability, offers } = req.body;
 
         // Validate ObjectId format
         if (!mongoose.Types.ObjectId.isValid(menuId)) {
@@ -78,14 +78,23 @@ export const updateMenuItem = async (req, res, next) => {
             return res.status(404).json({ message: "Menu item not found" });
         }
 
+        // Upload new image to Cloudinary if provided
+        let imageUrl = menuItem.image; // Keep existing image if no new image is uploaded
+        if (req.file) {
+            const result = await cloudinaryInstance.uploader.upload(req.file.path, {
+                folder: "menu_items", // Upload to a specific folder
+            });
+            imageUrl = result.secure_url; // Get secure Cloudinary URL
+        }
+
         // Update only provided fields
         if (name) menuItem.name = name;
         if (description) menuItem.description = description;
         if (price) menuItem.price = price;
         if (category) menuItem.category = category;
-        if (image) menuItem.image = image;
         if (availability !== undefined) menuItem.availability = availability;
         if (offers) menuItem.offers = offers;
+        menuItem.image = imageUrl; // Update image if changed
 
         // Save the updated menu item
         await menuItem.save();
@@ -93,6 +102,7 @@ export const updateMenuItem = async (req, res, next) => {
         return res.status(200).json({ message: "Menu updated successfully", data: menuItem });
 
     } catch (error) {
+        console.error("Error updating menu item:", error);
         return res.status(500).json({ message: error.message || "Internal server error" });
     }
 };
@@ -191,6 +201,28 @@ export const searchMenuItems = async (req, res) => {
     }
 };
 
+export const getMenuItemById = async (req, res) => {
+    try {
+        const { menuId } = req.params; // Get menuId from request parameters
+        const restaurantId = req.restaurant.id; // Get restaurant ID from authenticated user
+
+        if (!menuId) {
+            return res.status(400).json({ message: "Menu ID is required" });
+        }
+
+        // Find the menu item that matches both menuId and restaurantId
+        const menuItem = await MenuItem.findOne({ _id: menuId, restaurantId });
+
+        if (!menuItem) {
+            return res.status(404).json({ message: "Menu item not found or unauthorized" });
+        }
+
+        return res.status(200).json({ data: menuItem });
+    } catch (error) {
+        console.error("Error fetching menu item:", error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+};
 
 
 

@@ -29,29 +29,33 @@ export const Cart = () => {
                 toast.error("Your cart is empty!");
                 return;
             }
-
+    
             if (!selectedAddress) {
                 toast.error("Please select a delivery address!");
                 return;
             }
-
+    
             const stripe = await loadStripe(import.meta.env.VITE_STRIPE_Publishable_key);
             const session = await axiosInstance.post("/payment/create-checkout-session", {
                 products: cartDetails?.items,
                 addressId: selectedAddress,
             });
-
+    
             if (!session?.data?.sessionId) {
                 throw new Error("Invalid session response from server.");
             }
-
+    
             await stripe.redirectToCheckout({ sessionId: session.data.sessionId });
+    
+            // Redirect to success page after payment
+            navigate("/payment-success");
+    
         } catch (error) {
             console.error(error);
             toast.error("Payment failed. Please try again.");
         }
     };
-
+    
     const handleRemoveCartItem = async (menuItemId) => {
         try {
             await axiosInstance.delete(`/cart/deleteCart/${menuItemId}`);

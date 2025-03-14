@@ -59,7 +59,7 @@ export const AddMenuForm = ({ menuItem }) => {
             }
 
             if (menuItem) {
-                await axiosInstance.put(`/menu/update-menu/${menuItem._id}`, formData);
+                await axiosInstance.put(`/menu/updateMenu/${menuItem._id}`, formData);
                 toast.success("Menu updated successfully");
             } else {
                 await axiosInstance.post("/menu/add-menu", formData);

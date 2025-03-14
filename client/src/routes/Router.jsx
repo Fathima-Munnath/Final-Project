@@ -18,6 +18,7 @@ import {RestaurantOrders} from "../pages/restaurant/RestaurantOrders";
 import {RestaurantProfile}  from "../pages/restaurant/RestaurantProfile";
 import {Cart} from "../pages/user/Cart";
 import { PaymentSuccess} from "../pages/user/PaymentSuccess";
+import { UpdateMenu } from "../components/restaurant/UpdateMenu";
 
 
 const data = {};
@@ -115,6 +116,10 @@ export const router = createBrowserRouter([
           {
             path: "addMenu/:menuItemId?",
             element: <AddMenu />,
+          },
+          {
+            path:"updateMenu/:id" ,
+            element:<UpdateMenu />
           },
         ],
       },

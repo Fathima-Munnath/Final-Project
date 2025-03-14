@@ -9,16 +9,16 @@ export const MenuCards = ({ menuItem}) => {
 
   
 
-  // Handle menu delete
-  const handleDelete = async () => {
-    try {
-      const response = await axiosInstance.delete(`/menu/deleteMenu/${menuItem?._id}`);
-      toast.success(response.data.message || "Menu item deleted successfully");
+  // // Handle menu delete
+  // const handleDelete = async () => {
+  //   try {
+  //     const response = await axiosInstance.delete(`/menu/deleteMenu/${menuItem?._id}`);
+  //     toast.success(response.data.message || "Menu item deleted successfully");
     
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Error deleting menu item");
-    }
-  };
+  //   } catch (error) {
+  //     toast.error(error.response?.data?.message || "Error deleting menu item");
+  //   }
+  // };
   const handleToggleAvailability = async () => {
     try {
         const response = await axiosInstance.patch(`/menu/toggleAvailability/${menuItem?._id}`);
@@ -55,14 +55,14 @@ export const MenuCards = ({ menuItem}) => {
           <button
             type="button"
             className="px-3 py-1 text-xs font-medium text-white bg-blue-600 rounded-lg hover:bg-red-700"
-            onClick={handleToggleAvailability}
+            onClick={() => navigate(`/restaurant/updateMenu/${menuItem._id}`)}
           >
         Update
           </button>
           <button
             type="button"
             className="px-3 py-1 text-xs font-medium text-white bg-red-600 rounded-lg hover:bg-red-700"
-            onClick={ handleDelete }
+            onClick={ handleToggleAvailability }
           >
             Delete
           </button>
