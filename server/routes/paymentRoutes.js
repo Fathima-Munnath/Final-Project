@@ -18,7 +18,7 @@ router.post("/create-checkout-session", userAuth, async (req, res, next) => {
         }
 
 
-        const totalAmount = products.reduce((sum, product) => sum + (product?.menuItemId?.price || 0), 0) * 100; // in paise
+        const totalAmount = products.reduce((sum, product) => sum + ((product?.menuItemId?.price * product?.quantity) || 0), 0) * 100; // in paise
         const restaurantId = products[0]?.menuItemId?.restaurantId; // Assuming all products are from the same restaurant
 
         if (!restaurantId) {
